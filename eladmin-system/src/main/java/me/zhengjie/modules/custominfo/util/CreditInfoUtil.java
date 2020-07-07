@@ -25,7 +25,11 @@ import me.zhengjie.modules.custominfo.beans.SpsInfSgmt;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoDto;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.XMLUtil;
-
+/**
+ * 
+ * @author jianb-wang
+ *
+ */
 @Slf4j
 @SuppressWarnings({ "unchecked", "all" })
 public class CreditInfoUtil {
