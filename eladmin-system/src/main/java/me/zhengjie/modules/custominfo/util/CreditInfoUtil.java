@@ -6,12 +6,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.custominfo.beans.BsSgmt;
 import me.zhengjie.modules.custominfo.beans.EduInfSgmt;
 import me.zhengjie.modules.custominfo.beans.FcsInfSgmt;
+import me.zhengjie.modules.custominfo.beans.IDRec;
+import me.zhengjie.modules.custominfo.beans.IDSgmt;
 import me.zhengjie.modules.custominfo.beans.InBasInf;
 import me.zhengjie.modules.custominfo.beans.IncInfSgmt;
 import me.zhengjie.modules.custominfo.beans.MlgInfSgmt;
@@ -39,7 +43,7 @@ public class CreditInfoUtil {
 		String filePath = tempPath + File.separator + "test" + ".txt";
 		StringBuffer sb = new StringBuffer();
 		for (BusCustomerBaseInfoDto busCustomerBaseInfoDto : all) {
-			InBasInf inBasInf = build(busCustomerBaseInfoDto);
+			InBasInf inBasInf = build2(busCustomerBaseInfoDto);
 			sb.append(XMLUtil.convertToXml(inBasInf));
 			sb.append("\n");
 		}
@@ -66,49 +70,49 @@ public class CreditInfoUtil {
 	 * @param busCustomerBaseInfoDto
 	 * @return
 	 */
-//	private static InBasInf build(BusCustomerBaseInfoDto busCustomerBaseInfoDto) {
-//		InBasInf inBasInf=new InBasInf();
-//		BsSgmt bsSgmt=new BsSgmt();
-//		bsSgmt.setIDType(100);
-//		bsSgmt.setName("张三");
-//		bsSgmt.setIDType(10);
-//		bsSgmt.setIDNum("110111198012011234");
-//		bsSgmt.setRptDate(new Timestamp(System.currentTimeMillis()).toString());
-//		bsSgmt.setRptDateCode("10");
-//		bsSgmt.setCimoc("B10111000H0001");
-//		bsSgmt.setCustomerType("11");
-//		inBasInf.setBsSgmt(bsSgmt);
-//		
-//		IDSgmt iDSgmt=new IDSgmt();
-//		iDSgmt.setIDNm("2");
-//		List<IDRec> IDRec=new ArrayList<>();
-//		IDRec IDRec1=new IDRec();
-//		IDRec1.setAlias("李四");
-//		IDRec1.setOthIDType("1");
-//		IDRec1.setOthIDNum("110111198012011234");
-//		IDRec IDRec2=new IDRec();
-//		IDRec2.setAlias("旺旺");
-//		IDRec2.setOthIDType("1");
-//		IDRec2.setOthIDNum("110111198012011234");
-//		IDRec.add(IDRec1);
-//		IDRec.add(IDRec2);
-//		iDSgmt.setIDRec(IDRec);
-//		iDSgmt.setIDInfoUpDate(new Timestamp(System.currentTimeMillis()).toString());
-//		inBasInf.setIDSgmt(iDSgmt);
-//		
-//		FcsInfSgmt FcsInfSgmt =new FcsInfSgmt();
-//		FcsInfSgmt.setSex(1);
-//		FcsInfSgmt.setDOB(new Timestamp(System.currentTimeMillis()).toString());
-//		FcsInfSgmt.setNation("CHN");
-//		FcsInfSgmt.setHouseAdd("地址详细信息");
-//		FcsInfSgmt.setHhDist("075100");
-//		FcsInfSgmt.setCellPhone("13876547890");
-//		FcsInfSgmt.setEmail("123@123.com");
-//		FcsInfSgmt.setFcsInfoUpDate(new Timestamp(System.currentTimeMillis()).toString());
-//		inBasInf.setFcsInfSgmt(FcsInfSgmt );
-//		
-//		return inBasInf;
-//	}
+	private static InBasInf build2(BusCustomerBaseInfoDto busCustomerBaseInfoDto) {
+		InBasInf inBasInf=new InBasInf();
+		BsSgmt bsSgmt=new BsSgmt();
+		bsSgmt.setIDType(100);
+		bsSgmt.setName("张三");
+		bsSgmt.setIDType(10);
+		bsSgmt.setIDNum("110111198012011234");
+		bsSgmt.setRptDate(new Timestamp(System.currentTimeMillis()).toString());
+		bsSgmt.setRptDateCode("10");
+		bsSgmt.setCimoc("B10111000H0001");
+		bsSgmt.setCustomerType("11");
+		inBasInf.setBsSgmt(bsSgmt);
+		
+		IDSgmt iDSgmt=new IDSgmt();
+		iDSgmt.setIDNm("2");
+		List<IDRec> IDRec=new ArrayList<>();
+		IDRec IDRec1=new IDRec();
+		IDRec1.setAlias("李四");
+		IDRec1.setOthIDType("1");
+		IDRec1.setOthIDNum("110111198012011234");
+		IDRec IDRec2=new IDRec();
+		IDRec2.setAlias("旺旺");
+		IDRec2.setOthIDType("1");
+		IDRec2.setOthIDNum("110111198012011234");
+		IDRec.add(IDRec1);
+		IDRec.add(IDRec2);
+		iDSgmt.setIDRec(IDRec);
+		iDSgmt.setIDInfoUpDate(new Timestamp(System.currentTimeMillis()).toString());
+		inBasInf.setIDSgmt(iDSgmt);
+		
+		FcsInfSgmt FcsInfSgmt =new FcsInfSgmt();
+		FcsInfSgmt.setSex(1);
+		FcsInfSgmt.setDOB(new Timestamp(System.currentTimeMillis()).toString());
+		FcsInfSgmt.setNation("CHN");
+		FcsInfSgmt.setHouseAdd("地址详细信息");
+		FcsInfSgmt.setHhDist("075100");
+		FcsInfSgmt.setCellPhone("13876547890");
+		FcsInfSgmt.setEmail("123@123.com");
+		FcsInfSgmt.setFcsInfoUpDate(new Timestamp(System.currentTimeMillis()).toString());
+		inBasInf.setFcsInfSgmt(FcsInfSgmt );
+		
+		return inBasInf;
+	}
 	private static InBasInf build(BusCustomerBaseInfoDto busCustomerBaseInfoDto) {
 		InBasInf inBasInf = new InBasInf();
 		// 基本段
