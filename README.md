@@ -1,4 +1,4 @@
-<h1 style="text-align: center">EL-ADMIN 后台管理系统</h1>
+<h1 style="text-align: center">基于EL-ADMIN 开发的征信报文报送后台管理系统</h1>
 <div style="text-align: center">
 
 [![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/elunez/eladmin/blob/master/LICENSE)
@@ -11,18 +11,6 @@
 #### 项目简介
 一个基于 Spring Boot 2.1.0 、 Spring Boot Jpa、 JWT、Spring Security、Redis、Vue的前后端分离的后台管理系统
 
-**开发文档：**  [https://el-admin.vip](https://el-admin.vip)
-
-**体验地址：**  [https://el-admin.xin](https://el-admin.xin)
-
-**账号密码：** `admin / 123456`
-
-#### 项目源码
-
-|     |   后端源码  |   前端源码  |
-|---  |--- | --- |
-|  github   |  https://github.com/elunez/eladmin   |  https://github.com/elunez/eladmin-web   |
-|  码云   |  https://gitee.com/elunez/eladmin   |  https://gitee.com/elunez/eladmin-web   |
 
 #### 主要特性
 - 使用最新技术栈，社区资源丰富。
@@ -85,43 +73,4 @@
 - eladmin-tools 系统第三方工具模块
 - eladmin-generator 系统代码生成模块
 ```
-    
-#### 系统预览
-<table>
-    <tr>
-        <td><img src="https://img.el-admin.xin/20200605172248.png"/></td>
-        <td><img src="https://img.el-admin.xin/20200605172339.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://img.el-admin.xin/20200605172432.png"/></td>
-        <td><img src="https://img.el-admin.xin/20200605172455.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://img.el-admin.xin/20200605172536.png"/></td>
-        <td><img src="https://img.el-admin.xin/20200605172558.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://img.el-admin.xin/20200605172645.png"/></td>
-        <td><img src="https://img.el-admin.xin/20200605172715.png"/></td>
-    </tr>
-</table>
 
-#### 特别鸣谢
-
-- 感谢 [JetBrains](https://www.jetbrains.com/) 提供的非商业开源软件开发授权
-
-- 感谢 [PanJiaChen](https://github.com/PanJiaChen/vue-element-admin) 大佬提供的前端模板
-
-- 感谢 [Moxun](https://github.com/moxun1639) 大佬提供的前端 Curd 通用组件
-
-- 感谢 [zhy6599](https://gitee.com/zhy6599) 大佬提供的后端运维管理相关功能
-
-- 感谢 [j.yao.SUSE](https://github.com/everhopingandwaiting) 大佬提供的匿名接口与Redis限流等功能
-
-- 感谢 [d15801543974](https://github.com/d15801543974) 大佬提供的基于注解的通用查询方式
-
-#### 项目捐赠
-项目的发展离不开你的支持，请作者喝杯咖啡吧☕  [Donate](https://el-admin.vip/donation/)
-
-#### 反馈交流
-- QQ交流群：891137268
