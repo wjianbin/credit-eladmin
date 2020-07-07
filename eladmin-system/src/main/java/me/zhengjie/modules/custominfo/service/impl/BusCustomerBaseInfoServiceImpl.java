@@ -190,4 +190,20 @@ public class BusCustomerBaseInfoServiceImpl implements BusCustomerBaseInfoServic
             throw new BadRequestException("打包失败");
         }
     }
+
+	@Override
+	public void downloadCreditFile(List<BusCustomerBaseInfoDto> all) {
+		if (all == null) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadFile(all));
+            String zipPath = file.getPath() + ".zip";
+            System.out.println("zipPath:{}"+zipPath);
+            ZipUtil.zip(file.getPath(), zipPath);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
+		
+	}
 }

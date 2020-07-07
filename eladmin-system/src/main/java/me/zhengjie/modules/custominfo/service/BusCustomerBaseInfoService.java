@@ -90,5 +90,7 @@ public interface BusCustomerBaseInfoService {
      * @throws IOException
      */
     void downloadCreditFile(List<BusCustomerBaseInfoDto> all, HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+	void downloadCreditFile(List<BusCustomerBaseInfoDto> all);
     	   
 }
