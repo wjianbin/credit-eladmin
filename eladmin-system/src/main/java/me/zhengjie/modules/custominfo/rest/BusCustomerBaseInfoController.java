@@ -93,7 +93,7 @@ public class BusCustomerBaseInfoController {
     @Log("下载报文数据")
     @ApiOperation("下载报文数据")
     @GetMapping(value = "/downloadcreditfile")
-    public ResponseEntity<Object> downloadcreditfile(HttpServletRequest request,HttpServletResponse response, BusCustomerBaseInfoQueryCriteria criteria) throws IOException {
+    public ResponseEntity<Object> downloadcreditfile(HttpServletRequest request,HttpServletResponse response, BusCustomerBaseInfoQueryCriteria criteria) throws Exception {
         
     	List<BusCustomerBaseInfoDto> all=new ArrayList<>();
 		BusCustomerBaseInfoDto e=new BusCustomerBaseInfoDto();

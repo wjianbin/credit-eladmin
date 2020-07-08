@@ -13,6 +13,8 @@ public class DateHelper {
 	public static final String AMR_NOMAL_DATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
 	public static final String AMR_NOMAL_FULLDATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 	public static final String AMR_NOMAL_FULLTIME_FORMAT = "HH:mm:ss.SSS";
+	public static final String AMR_NOMAL_DATE_FORMAT2 = "yyyyMMdd";
+	public static final String AMR_NOMAL_DATE_FORMAT_LONG = "yyyyMMddHHmmss";
 
 	public static final String TERM_UNIT_DAY = "D";// 期限天
 	public static final String TERM_UNIT_MONTH = "M";// 期限月
@@ -260,6 +262,23 @@ public class DateHelper {
 		Date date = new Date();
 		return formatter.format(date);
 	}
+	
+	public static String getCurrentTimeNoS() throws Exception {
+		SimpleDateFormat formatter = new SimpleDateFormat(AMR_NOMAL_DATE_FORMAT2);
+		Date date = new Date();
+		return formatter.format(date);
+	}
+	public static String getCurrentTimeNoSLong() throws Exception {
+		SimpleDateFormat formatter = new SimpleDateFormat(AMR_NOMAL_DATE_FORMAT2);
+		Date date = new Date();
+		return formatter.format(date);
+	}
+	public static int getRandomNum(){
+		int max=999,min=1;
+		long randomNum = System.currentTimeMillis();  
+		int ran3 = (int) (randomNum%(max-min)+min);  
+		return ran3;
+	}
 
 	public static void main(String[] args) throws Exception {
 
@@ -269,8 +288,13 @@ public class DateHelper {
 			System.out.println(DateHelper.getRelativeDate("2016/01/29", "D", i) + "--"
 					+ DateHelper.isWorkingDate(DateHelper.getRelativeDate("2016/01/29", "D", i)));
 		}*/
-		
-		System.out.println(DateHelper.getCurrentTime());
+		for(int i=0 ;i<100;i++) {
+		Thread.sleep(1);
+		int max=999,min=1;
+		long randomNum = System.currentTimeMillis();  
+		int ran3 = (int) (randomNum%(max-min)+min);  
+		System.out.println(ran3);
+		}
 	}
 
 }

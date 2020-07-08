@@ -15,29 +15,39 @@
 */
 package me.zhengjie.modules.custominfo.service.impl;
 
-import me.zhengjie.modules.custominfo.domain.BusCustomerCardinfos;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ZipUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.exception.BadRequestException;
+import me.zhengjie.modules.custominfo.domain.BusCustomerCardinfos;
 import me.zhengjie.modules.custominfo.repository.BusCustomerCardinfosRepository;
 import me.zhengjie.modules.custominfo.service.BusCustomerCardinfosService;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardinfosDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardinfosQueryCriteria;
 import me.zhengjie.modules.custominfo.service.mapstruct.BusCustomerCardinfosMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
+import me.zhengjie.modules.quartz.constant.TaskConstants;
+import me.zhengjie.utils.DateHelper;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import me.zhengjie.utils.ValidationUtil;
 
 /**
 * @website https://el-admin.vip
@@ -118,4 +128,34 @@ public class BusCustomerCardinfosServiceImpl implements BusCustomerCardinfosServ
         }
         FileUtil.downloadExcel(list, response);
     }
+    @Override
+    public void downloadCreditFile(List<BusCustomerCardinfosDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	if (all == null) {
+			throw new BadRequestException("请选择数据");
+		}
+		try {
+			File file = new File(CreditInfoUtil.downloadCustomerCardinfosFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_CARDINFOS_DECRB,
+					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			String zipPath = file.getPath() + ".zip";
+			ZipUtil.zip(file.getPath(), zipPath);
+			FileUtil.downloadFile(request, response, new File(zipPath), true);
+		} catch (IOException e) {
+			throw new BadRequestException("打包失败");
+		}
+    }
+	@Override
+	public void downloadCreditFile(List<BusCustomerCardinfosDto> all) throws Exception {
+		if (all == null) {
+			throw new BadRequestException("请选择数据");
+		}
+		try {
+			File file = new File(CreditInfoUtil.downloadCustomerCardinfosFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_CARDINFOS_DECRB,
+					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			String zipPath = file.getPath() + ".zip";
+			ZipUtil.zip(file.getPath(), zipPath);
+		} catch (IOException e) {
+			throw new BadRequestException("打包失败");
+		}
+		
+	}
 }

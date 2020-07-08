@@ -16,6 +16,8 @@
 package me.zhengjie.modules.custominfo.service.dto;
 
 import lombok.Data;
+
+import java.sql.Timestamp;
 import java.util.List;
 import me.zhengjie.annotation.Query;
 
@@ -26,4 +28,7 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusDelCustomerCardpipyQueryCriteria{
+	
+	 @Query
+	 private Timestamp createTime;
 }

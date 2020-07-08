@@ -15,8 +15,10 @@
 */
 package me.zhengjie.modules.custominfo.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.custominfo.domain.BusCustomerRelationship;
 import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.DateHelper;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.custominfo.repository.BusCustomerRelationshipRepository;
@@ -24,17 +26,25 @@ import me.zhengjie.modules.custominfo.service.BusCustomerRelationshipService;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerRelationshipDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerRelationshipQueryCriteria;
 import me.zhengjie.modules.custominfo.service.mapstruct.BusCustomerRelationshipMapper;
+import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
+import me.zhengjie.modules.quartz.constant.TaskConstants;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ZipUtil;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -119,4 +129,38 @@ public class BusCustomerRelationshipServiceImpl implements BusCustomerRelationsh
         }
         FileUtil.downloadExcel(list, response);
     }
+
+	@Override
+	public void downloadCreditFile(List<BusCustomerRelationshipDto> all, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if (all == null) {
+			throw new BadRequestException("请选择数据");
+		}
+		try {
+			File file = new File(CreditInfoUtil.downloadRelationshipFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_RELATIONSHIP_DECRB,
+					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			String zipPath = file.getPath() + ".zip";
+			ZipUtil.zip(file.getPath(), zipPath);
+			FileUtil.downloadFile(request, response, new File(zipPath), true);
+		} catch (IOException e) {
+			throw new BadRequestException("打包失败");
+		}
+		
+		
+	}
+
+	@Override
+	public void downloadCreditFile(List<BusCustomerRelationshipDto> all) throws Exception {
+		if (all == null) {
+			throw new BadRequestException("请选择数据");
+		}
+		try {
+			File file = new File(CreditInfoUtil.downloadRelationshipFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_RELATIONSHIP_DECRB,
+					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			String zipPath = file.getPath() + ".zip";
+			ZipUtil.zip(file.getPath(), zipPath);
+		} catch (IOException e) {
+			throw new BadRequestException("打包失败");
+		}
+	}
 }

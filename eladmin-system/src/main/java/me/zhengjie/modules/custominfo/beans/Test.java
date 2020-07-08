@@ -6,12 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import me.zhengjie.modules.custominfo.domain.BusCustomerRelationship;
-import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoDto;
-import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
-import me.zhengjie.utils.XMLUtil;
 
 public class Test {
 

@@ -15,8 +15,9 @@
 */
 package me.zhengjie.modules.custominfo.service.dto;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
-import java.util.List;
 import me.zhengjie.annotation.Query;
 
 /**
@@ -30,4 +31,8 @@ public class BusCustomerRelationshipQueryCriteria{
     /** 精确 */
     @Query
     private String customerid;
+    
+    @Query
+    private Timestamp createTime;
+    
 }

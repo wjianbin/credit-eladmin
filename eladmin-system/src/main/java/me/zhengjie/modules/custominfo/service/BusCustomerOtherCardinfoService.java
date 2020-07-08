@@ -16,12 +16,15 @@
 package me.zhengjie.modules.custominfo.service;
 
 import me.zhengjie.modules.custominfo.domain.BusCustomerOtherCardinfo;
+import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardpipyDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerOtherCardinfoDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerOtherCardinfoQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,4 +83,9 @@ public interface BusCustomerOtherCardinfoService {
     * @throws IOException /
     */
     void download(List<BusCustomerOtherCardinfoDto> all, HttpServletResponse response) throws IOException;
+    
+    void downloadCreditFile(List<BusCustomerOtherCardinfoDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+   	void downloadCreditFile(List<BusCustomerOtherCardinfoDto> all)throws Exception;
+
 }

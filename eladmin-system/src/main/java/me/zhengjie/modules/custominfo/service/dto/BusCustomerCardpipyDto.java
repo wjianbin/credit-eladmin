@@ -78,5 +78,5 @@ public class BusCustomerCardpipyDto implements Serializable {
     private Integer uploadflag;
 
     /** create_time */
-    private Timestamp ureateTime;
+    private Timestamp createTime;
 }
