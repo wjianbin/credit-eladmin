@@ -19,16 +19,19 @@ import me.zhengjie.domain.ColumnInfo;
 import me.zhengjie.domain.GenConfig;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.custominfo.domain.BusCustomerBaseInfo;
+import me.zhengjie.modules.custominfo.domain.BusDelCustomerInfo;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.DateHelper;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.GenUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.custominfo.repository.BusCustomerBaseInfoRepository;
+import me.zhengjie.modules.custominfo.repository.BusDelCustomerInfoRepository;
 import me.zhengjie.modules.custominfo.service.BusCustomerBaseInfoService;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoQueryCriteria;
 import me.zhengjie.modules.custominfo.service.mapstruct.BusCustomerBaseInfoMapper;
+import me.zhengjie.modules.custominfo.service.mapstruct.BusDelCustomerInfoMapper;
 import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
 import me.zhengjie.modules.quartz.constant.TaskConstants;
 
@@ -46,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,6 +69,9 @@ public class BusCustomerBaseInfoServiceImpl implements BusCustomerBaseInfoServic
 	private final BusCustomerBaseInfoRepository busCustomerBaseInfoRepository;
 	private final BusCustomerBaseInfoMapper busCustomerBaseInfoMapper;
 
+	private final BusDelCustomerInfoRepository busDelCustomerInfoRepository;
+    private final BusDelCustomerInfoMapper busDelCustomerInfoMapper;
+    
 	@Override
 	public Map<String, Object> queryAll(BusCustomerBaseInfoQueryCriteria criteria, Pageable pageable) {
 		Page<BusCustomerBaseInfo> page = busCustomerBaseInfoRepository.findAll(
@@ -109,7 +116,22 @@ public class BusCustomerBaseInfoServiceImpl implements BusCustomerBaseInfoServic
 	@Override
 	public void deleteAll(Long[] ids) {
 		for (Long id : ids) {
-			busCustomerBaseInfoRepository.deleteById(id);
+			BusCustomerBaseInfo busCustomerBaseInfo = busCustomerBaseInfoRepository.findById(id)
+					.orElseGet(BusCustomerBaseInfo::new);
+			busCustomerBaseInfo.setUploadflag(3);//假删除，标记为删除状态
+			busCustomerBaseInfoRepository.save(busCustomerBaseInfo);
+		    //生成删除报文数据
+			BusDelCustomerInfo busDelCustomerInfo = new BusDelCustomerInfo();
+			busDelCustomerInfo.setInfrectype("114");
+			busDelCustomerInfo.setName(busCustomerBaseInfo.getName());
+			busDelCustomerInfo.setIdtype(busCustomerBaseInfo.getIdtype().toString());
+			busDelCustomerInfo.setIdnum(busCustomerBaseInfo.getIdnum());
+			busDelCustomerInfo.setInfsurccode(busCustomerBaseInfo.getInfsurccode());
+			busDelCustomerInfo.setCreateTime(new Timestamp(System.currentTimeMillis()));
+			busDelCustomerInfo.setCustomerid(busCustomerBaseInfo.getCustomerid());
+			busDelCustomerInfo.setStatus(0);//状态未上报
+	        busDelCustomerInfoRepository.save(busDelCustomerInfo);
+			//busCustomerBaseInfoRepository.deleteById(id);
 		}
 	}
 

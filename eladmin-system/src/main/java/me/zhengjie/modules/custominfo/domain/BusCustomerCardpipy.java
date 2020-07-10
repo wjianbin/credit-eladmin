@@ -37,7 +37,8 @@ public class BusCustomerCardpipy implements Serializable {
 
     @Id
     @Column(name = "id1")
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id1;
 
     @Column(name = "InfRecType")

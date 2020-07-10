@@ -37,7 +37,8 @@ public class BusDelCustomerCardpipy implements Serializable {
 
     @Id
     @Column(name = "id")
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "InfRecType")
@@ -74,7 +75,7 @@ public class BusDelCustomerCardpipy implements Serializable {
 
     @Column(name = "Ureate_time")
     @ApiModelProperty(value = "create_time")
-    private Timestamp ureateTime;
+    private Timestamp createTime;
 
     public void copy(BusDelCustomerCardpipy source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

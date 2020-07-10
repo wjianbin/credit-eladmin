@@ -17,11 +17,13 @@ package me.zhengjie.modules.custominfo.service.impl;
 
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.custominfo.domain.BusCustomerCardpipy;
+import me.zhengjie.modules.custominfo.domain.BusDelCustomerCardpipy;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.DateHelper;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.custominfo.repository.BusCustomerCardpipyRepository;
+import me.zhengjie.modules.custominfo.repository.BusDelCustomerCardpipyRepository;
 import me.zhengjie.modules.custominfo.service.BusCustomerCardpipyService;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardpipyDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardpipyQueryCriteria;
@@ -43,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,6 +64,7 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
 
     private final BusCustomerCardpipyRepository busCustomerCardpipyRepository;
     private final BusCustomerCardpipyMapper busCustomerCardpipyMapper;
+    private final BusDelCustomerCardpipyRepository busDelCustomerCardpipyRepository;
 
     @Override
     public Map<String,Object> queryAll(BusCustomerCardpipyQueryCriteria criteria, Pageable pageable){
@@ -101,7 +105,24 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id1 : ids) {
-            busCustomerCardpipyRepository.deleteById(id1);
+            //busCustomerCardpipyRepository.deleteById(id1);
+        	//改删除功能为假删除，标记为删除状态，同时生成删除报文数据
+        	BusCustomerCardpipy busCustomerCardpipy = busCustomerCardpipyRepository.findById(id1).orElseGet(BusCustomerCardpipy::new);
+            busCustomerCardpipy.setUploadflag(3);
+            busCustomerCardpipyRepository.save(busCustomerCardpipy);
+            //生成删除报文数据
+            BusDelCustomerCardpipy busDelCustomerCardpipy = new BusDelCustomerCardpipy();
+            busDelCustomerCardpipy.setInfrectype("134");
+            busDelCustomerCardpipy.setName(busCustomerCardpipy.getName());
+            busDelCustomerCardpipy.setIdtype(busCustomerCardpipy.getIdtype());
+            busDelCustomerCardpipy.setIdnum(busCustomerCardpipy.getIdnum());
+            busDelCustomerCardpipy.setInfsurccode(busCustomerCardpipy.getCustomerid());
+            busDelCustomerCardpipy.setCustomerid(busCustomerCardpipy.getCustomerid());
+            busDelCustomerCardpipy.setUploadstats(0);
+            busDelCustomerCardpipy.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            
+            busDelCustomerCardpipyRepository.save(busDelCustomerCardpipy);
+        	
         }
     }
 
@@ -124,7 +145,7 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
             map.put("客户编码", busCustomerCardpipy.getCustomerid());
             map.put("上报日期", busCustomerCardpipy.getUploaddate());
             map.put("上报标识", busCustomerCardpipy.getUploadflag());
-            map.put("create_time", busCustomerCardpipy.getUreateTime());
+            map.put("create_time", busCustomerCardpipy.getCreateTime());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
