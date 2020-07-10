@@ -79,7 +79,7 @@ public class BusCustomerCardinfos implements Serializable {
 
     @Column(name = "RptDate")
     @ApiModelProperty(value = "信息报告日期")
-    private Timestamp rptdate;
+    private String rptdate;
 
     @Column(name = "CustomerId")
     @ApiModelProperty(value = "客户编码")

@@ -78,8 +78,9 @@ public class CreditInfoUtil {
 		String fileTitle=createFileTitle(busType, all.size());
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
+		sb.append("\n");
 		for (BusCustomerBaseInfoDto busCustomerBaseInfoDto : all) {
-			InBasInf inBasInf = build2(busCustomerBaseInfoDto);
+			InBasInf inBasInf = build(busCustomerBaseInfoDto);
 			sb.append(XMLUtil.convertToXml(inBasInf));
 			sb.append("\n");
 		}
@@ -160,9 +161,9 @@ public class CreditInfoUtil {
 	private static InBasInf build2(BusCustomerBaseInfoDto busCustomerBaseInfoDto) {
 		InBasInf inBasInf = new InBasInf();
 		BsSgmt bsSgmt = new BsSgmt();
-		bsSgmt.setIDType(100);
+		bsSgmt.setIDType("100");
 		bsSgmt.setName("张三");
-		bsSgmt.setIDType(10);
+		bsSgmt.setIDType("10");
 		bsSgmt.setIDNum("110111198012011234");
 		bsSgmt.setRptDate(new Timestamp(System.currentTimeMillis()).toString());
 		bsSgmt.setRptDateCode("10");
@@ -209,7 +210,7 @@ public class CreditInfoUtil {
 		bsSgmt.setName(busCustomerBaseInfoDto.getName());
 		bsSgmt.setIDType(busCustomerBaseInfoDto.getIdtype());
 		bsSgmt.setIDNum(busCustomerBaseInfoDto.getIdnum());
-		bsSgmt.setRptDate(busCustomerBaseInfoDto.getRptdate().toString());
+		bsSgmt.setRptDate(busCustomerBaseInfoDto.getRptdate() != null ? busCustomerBaseInfoDto.getRptdate().toString():"");
 		bsSgmt.setRptDateCode(busCustomerBaseInfoDto.getRptdatecode());
 		bsSgmt.setCimoc(busCustomerBaseInfoDto.getCimoc());
 		bsSgmt.setCustomerType(busCustomerBaseInfoDto.getCustomertype());
@@ -218,13 +219,13 @@ public class CreditInfoUtil {
 		// 基本概况段
 		FcsInfSgmt FcsInfSgmt = new FcsInfSgmt();
 		FcsInfSgmt.setSex(busCustomerBaseInfoDto.getSex());
-		FcsInfSgmt.setDOB(busCustomerBaseInfoDto.getDob().toString());
+		FcsInfSgmt.setDOB(busCustomerBaseInfoDto.getDob() !=null ?busCustomerBaseInfoDto.getDob().toString() : "");
 		FcsInfSgmt.setNation(busCustomerBaseInfoDto.getNation());
 		FcsInfSgmt.setHouseAdd(busCustomerBaseInfoDto.getHouseadd());
 		FcsInfSgmt.setHhDist(busCustomerBaseInfoDto.getHhdist());
 		FcsInfSgmt.setCellPhone(busCustomerBaseInfoDto.getCellphone());
 		FcsInfSgmt.setEmail(busCustomerBaseInfoDto.getEmail());
-		FcsInfSgmt.setFcsInfoUpDate(busCustomerBaseInfoDto.getFcsinfoupdate().toString());
+		FcsInfSgmt.setFcsInfoUpDate(busCustomerBaseInfoDto.getFcsinfoupdate() != null ? busCustomerBaseInfoDto.getFcsinfoupdate().toString() : "");
 		inBasInf.setFcsInfSgmt(FcsInfSgmt);
 
 		// 婚姻信息段
@@ -235,13 +236,13 @@ public class CreditInfoUtil {
 		dpsInfSgmt.setSpoName(busCustomerBaseInfoDto.getSponame());
 		dpsInfSgmt.setSpoTel(busCustomerBaseInfoDto.getSpotel());
 		dpsInfSgmt.setSpsCmpyNm(busCustomerBaseInfoDto.getSpscmpynm());
-		dpsInfSgmt.setSpsInfoUpDate(busCustomerBaseInfoDto.getSpsinfoupdate().toString());
+		dpsInfSgmt.setSpsInfoUpDate(busCustomerBaseInfoDto.getSpsinfoupdate() !=null ?busCustomerBaseInfoDto.getSpsinfoupdate().toString() : "");
 		inBasInf.setSpsInfSgmt(dpsInfSgmt);
 
 		// 教育信息段
 		EduInfSgmt eduInfSgmt = new EduInfSgmt();
 		eduInfSgmt.setAcaDegree(busCustomerBaseInfoDto.getAcadegree());
-		eduInfSgmt.setEduInfoUpDate(busCustomerBaseInfoDto.getEduinfoupdate().toString());
+		eduInfSgmt.setEduInfoUpDate(busCustomerBaseInfoDto.getEduinfoupdate() !=null ?busCustomerBaseInfoDto.getEduinfoupdate().toString(): "");
 		eduInfSgmt.setEduLevel(busCustomerBaseInfoDto.getEdulevel());
 		inBasInf.setEduInfSgmt(eduInfSgmt);
 
@@ -256,10 +257,10 @@ public class CreditInfoUtil {
 		octpnInfSgmt.setEmpStatus(busCustomerBaseInfoDto.getEmpstatus());
 		octpnInfSgmt.setIndustry(busCustomerBaseInfoDto.getIndustry());
 		octpnInfSgmt.setOccupation(busCustomerBaseInfoDto.getOccupation());
-		octpnInfSgmt.setOctpnInfoUpDate(busCustomerBaseInfoDto.getOctpninfoupdate().toString());
+		octpnInfSgmt.setOctpnInfoUpDate(busCustomerBaseInfoDto.getOctpninfoupdate() !=null ?busCustomerBaseInfoDto.getOctpninfoupdate().toString() : "");
 		octpnInfSgmt.setTechTitle(busCustomerBaseInfoDto.getTechtitle());
 		octpnInfSgmt.setTitle(busCustomerBaseInfoDto.getTitle());
-		octpnInfSgmt.setWorkStartDate(busCustomerBaseInfoDto.getWorkstartdate().toString());
+		octpnInfSgmt.setWorkStartDate(busCustomerBaseInfoDto.getWorkstartdate()!=null ?busCustomerBaseInfoDto.getWorkstartdate().toString():"");
 		inBasInf.setOctpnInfSgmt(octpnInfSgmt);
 
 		// 居住地址段
@@ -267,7 +268,7 @@ public class CreditInfoUtil {
 		redncInfSgmt.setHomeTel(busCustomerBaseInfoDto.getHometel());
 		redncInfSgmt.setResiAddr(busCustomerBaseInfoDto.getResiaddr());
 		redncInfSgmt.setResiDist(busCustomerBaseInfoDto.getResidist());
-		redncInfSgmt.setResiInfoUpDate(busCustomerBaseInfoDto.getResiinfoupdate().toString());
+		redncInfSgmt.setResiInfoUpDate(busCustomerBaseInfoDto.getResiinfoupdate()!=null ?busCustomerBaseInfoDto.getResiinfoupdate().toString():"");
 		redncInfSgmt.setResiPc(busCustomerBaseInfoDto.getResipc());
 		redncInfSgmt.setResiStatus(busCustomerBaseInfoDto.getResistatus());
 		inBasInf.setRedncInfSgmt(redncInfSgmt);
@@ -277,13 +278,13 @@ public class CreditInfoUtil {
 		mlgInfSgmt.setMailAddr(busCustomerBaseInfoDto.getMailaddr());
 		mlgInfSgmt.setMailDist(busCustomerBaseInfoDto.getMaildist());
 		mlgInfSgmt.setMailPc(busCustomerBaseInfoDto.getMailpc());
-		mlgInfSgmt.setMlgInfoUpDate(busCustomerBaseInfoDto.getMlginfoupdate().toString());
+		mlgInfSgmt.setMlgInfoUpDate(busCustomerBaseInfoDto.getMlginfoupdate()!=null ?busCustomerBaseInfoDto.getMlginfoupdate().toString():"");
 		inBasInf.setMlgInfSgmt(mlgInfSgmt);
 
 		// 收入信息段
 		IncInfSgmt incInfSgmt = new IncInfSgmt();
 		incInfSgmt.setAnnlInc(busCustomerBaseInfoDto.getAnnlinc());
-		incInfSgmt.setIncInfoUpDate(busCustomerBaseInfoDto.getIncinfoupdate().toString());
+		incInfSgmt.setIncInfoUpDate(busCustomerBaseInfoDto.getIncinfoupdate()!=null?busCustomerBaseInfoDto.getIncinfoupdate().toString():"");
 		incInfSgmt.setTaxIncome(busCustomerBaseInfoDto.getTaxincome());
 		inBasInf.setIncInfSgmt(incInfSgmt);
 		return inBasInf;
@@ -301,6 +302,7 @@ public class CreditInfoUtil {
 		String fileTitle=createFileTitle(busType, all.size());
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
+		sb.append("\n");
 		for (BusCustomerCardinfosDto busCustomerCardinfosDto : all) {
 			String json=JSON.toJSONString(busCustomerCardinfosDto);
 			InCtfItgInf inCtfItgInf=JSON.parseObject(json, InCtfItgInf.class);
@@ -336,6 +338,7 @@ public class CreditInfoUtil {
 		String fileTitle=createFileTitle(busType, all.size());
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
+		sb.append("\n");
 		for (BusCustomerCardpipyDto busCustomerCardpipyDto : all) {
 			String json=JSON.toJSONString(busCustomerCardpipyDto);
 			InIDEfctInf inIDEfctInf=JSON.parseObject(json, InIDEfctInf.class);
@@ -372,6 +375,7 @@ public class CreditInfoUtil {
 		String fileTitle=createFileTitle(busType, all.size());
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
+		sb.append("\n");
 		for (BusCustomerRelationshipDto busCustomerRelationshipDto : all) {
 			String json=JSON.toJSONString(busCustomerRelationshipDto);
 			InFalMmbsInf inFalMmbsInf=JSON.parseObject(json, InFalMmbsInf.class);
@@ -407,6 +411,7 @@ public class CreditInfoUtil {
 		String fileTitle=createFileTitle(busType, all.size());
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
+		sb.append("\n");
 		for (BusDelCustomerCardpipyDto busDelCustomerCardpipyDto : all) {
 			String json=JSON.toJSONString(busDelCustomerCardpipyDto);
 			InIDEfctInfDlt inIDEfctInfDlt=JSON.parseObject(json, InIDEfctInfDlt.class);
@@ -442,6 +447,7 @@ public class CreditInfoUtil {
 		String fileTitle=createFileTitle(busType, all.size());
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
+		sb.append("\n");
 		for (BusDelCustomerInfoDto busDelCustomerInfoDto : all) {
 			String json=JSON.toJSONString(busDelCustomerInfoDto);
 			InBsInfDlt inBsInfDlt=JSON.parseObject(json, InBsInfDlt.class);

@@ -62,6 +62,6 @@ public class InCtfItgInf implements Serializable{/**
 	    private String InfSurcCode;
 
 	    @ApiModelProperty(value = "信息报告日期")
-	    private Timestamp RptDate;
+	    private String RptDate;
 
 }

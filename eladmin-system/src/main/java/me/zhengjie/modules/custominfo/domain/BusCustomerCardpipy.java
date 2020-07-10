@@ -63,11 +63,11 @@ public class BusCustomerCardpipy implements Serializable {
 
     @Column(name = "IDEfctDate")
     @ApiModelProperty(value = "证件有效期起始日期")
-    private Timestamp idefctdate;
+    private String idefctdate;
 
     @Column(name = "IDDueDate")
     @ApiModelProperty(value = "证件有效期到期日期")
-    private Timestamp idduedate;
+    private String idduedate;
 
     @Column(name = "IDOrgName")
     @ApiModelProperty(value = "证件签发机关名称")
@@ -83,7 +83,7 @@ public class BusCustomerCardpipy implements Serializable {
 
     @Column(name = "RptDate")
     @ApiModelProperty(value = "信息报告日期")
-    private Timestamp rptdate;
+    private String rptdate;
 
     @Column(name = "CustomerId")
     @ApiModelProperty(value = "客户编码")
@@ -91,7 +91,7 @@ public class BusCustomerCardpipy implements Serializable {
 
     @Column(name = "UploadDate")
     @ApiModelProperty(value = "上报日期")
-    private Integer uploaddate;
+    private String uploaddate;
 
     @Column(name = "UploadFlag")
     @ApiModelProperty(value = "上报标识")

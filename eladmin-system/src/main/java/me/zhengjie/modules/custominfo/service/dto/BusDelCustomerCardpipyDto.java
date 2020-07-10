@@ -54,7 +54,7 @@ public class BusDelCustomerCardpipyDto implements Serializable {
     private String customerid;
 
     /** 上报日期 */
-    private Timestamp uploaddate;
+    private String uploaddate;
 
     /** 上报状态 */
     private Integer uploadstats;

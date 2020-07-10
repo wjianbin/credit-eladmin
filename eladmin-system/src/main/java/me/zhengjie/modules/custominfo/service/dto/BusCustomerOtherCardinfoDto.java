@@ -45,7 +45,7 @@ public class BusCustomerOtherCardinfoDto implements Serializable {
     private String othidnum;
 
     /** 信息更新日期 */
-    private Timestamp idinfoupdate;
+    private String idinfoupdate;
 
     /** customerId */
     private String customerid;

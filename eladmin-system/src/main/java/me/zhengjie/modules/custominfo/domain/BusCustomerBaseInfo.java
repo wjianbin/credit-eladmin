@@ -57,7 +57,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "IDType")
     @ApiModelProperty(value = "证件类型")
-    private Integer idtype;
+    private String idtype;
 
     @Column(name = "IDNum")
     @ApiModelProperty(value = "证件号码")
@@ -69,7 +69,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "RptDate")
     @ApiModelProperty(value = "信息报告日期")
-    private Timestamp rptdate;
+    private String rptdate;
 
     @Column(name = "RptDateCode")
     @ApiModelProperty(value = "报告时点说明代码")
@@ -89,7 +89,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "DOB")
     @ApiModelProperty(value = "出生日期")
-    private Timestamp dob;
+    private String dob;
 
     @Column(name = "Nation")
     @ApiModelProperty(value = "国籍")
@@ -113,7 +113,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "FcsInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp fcsinfoupdate;
+    private String fcsinfoupdate;
 
     @Column(name = "MariStatus")
     @ApiModelProperty(value = "婚姻状况")
@@ -125,7 +125,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "SpoIDType")
     @ApiModelProperty(value = "配偶证件类型")
-    private Integer spoidtype;
+    private String spoidtype;
 
     @Column(name = "SpoIDNum")
     @ApiModelProperty(value = "配偶证件号码")
@@ -141,7 +141,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "SpsInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp spsinfoupdate;
+    private String spsinfoupdate;
 
     @Column(name = "EduLevel")
     @ApiModelProperty(value = "学历")
@@ -153,7 +153,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "EduInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp eduinfoupdate;
+    private String eduinfoupdate;
 
     @Column(name = "EmpStatus")
     @ApiModelProperty(value = "就业状况")
@@ -201,11 +201,11 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "WorkStartDate")
     @ApiModelProperty(value = "本单位工作起始年份")
-    private Timestamp workstartdate;
+    private String workstartdate;
 
     @Column(name = "OctpnInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp octpninfoupdate;
+    private String octpninfoupdate;
 
     @Column(name = "ResiStatus")
     @ApiModelProperty(value = "居住状况")
@@ -229,7 +229,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "ResiInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp resiinfoupdate;
+    private String resiinfoupdate;
 
     @Column(name = "MailAddr")
     @ApiModelProperty(value = "通讯地址")
@@ -245,7 +245,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "MlgInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp mlginfoupdate;
+    private String mlginfoupdate;
 
     @Column(name = "AnnlInc")
     @ApiModelProperty(value = "自报年收入")
@@ -257,7 +257,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "IncInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp incinfoupdate;
+    private String incinfoupdate;
 
     @Column(name = "CustomerId")
     @ApiModelProperty(value = "客户编")
@@ -265,7 +265,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "InsertDate")
     @ApiModelProperty(value = "记录日期")
-    private Timestamp insertdate;
+    private String insertdate;
 
     @Column(name = "UploadDate")
     @ApiModelProperty(value = "上报日期")
@@ -285,7 +285,7 @@ public class BusCustomerBaseInfo implements Serializable {
 
     @Column(name = "UpdateDate")
     @ApiModelProperty(value = "更新日期")
-    private Timestamp updatedate;
+    private String updatedate;
 
     public void copy(BusCustomerBaseInfo source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

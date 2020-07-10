@@ -63,7 +63,7 @@ public class BusCustomerCardinfosDto implements Serializable {
     private String infsurccode;
 
     /** 信息报告日期 */
-    private Timestamp rptdate;
+    private String rptdate;
 
     /** 客户编码 */
     private String customerid;

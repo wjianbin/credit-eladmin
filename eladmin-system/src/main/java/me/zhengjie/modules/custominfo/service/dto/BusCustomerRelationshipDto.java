@@ -66,7 +66,7 @@ public class BusCustomerRelationshipDto implements Serializable {
     private String infsurccode;
 
     /** 信息报告日期 */
-    private Timestamp rptdate;
+    private String rptdate;
 
     /** 客户编号 */
     private String customerid;

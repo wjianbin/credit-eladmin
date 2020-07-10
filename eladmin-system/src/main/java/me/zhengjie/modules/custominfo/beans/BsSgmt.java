@@ -27,7 +27,7 @@ public class BsSgmt implements Serializable{/**
     private String Name;
 
     @ApiModelProperty(value = "证件类型")
-    private Integer IDType;
+    private String IDType;
 
     @ApiModelProperty(value = "证件号码")
     private String IDNum;

@@ -55,7 +55,7 @@ public class BusCustomerOtherCardinfo implements Serializable {
 
     @Column(name = "IDInfoUpDate")
     @ApiModelProperty(value = "信息更新日期")
-    private Timestamp idinfoupdate;
+    private String idinfoupdate;
 
     @Column(name = "CustomerId")
     @ApiModelProperty(value = "customerId")

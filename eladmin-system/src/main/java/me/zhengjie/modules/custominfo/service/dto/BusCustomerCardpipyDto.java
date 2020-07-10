@@ -51,10 +51,10 @@ public class BusCustomerCardpipyDto implements Serializable {
     private String infsurccode;
 
     /** 证件有效期起始日期 */
-    private Timestamp idefctdate;
+    private String idefctdate;
 
     /** 证件有效期到期日期 */
-    private Timestamp idduedate;
+    private String idduedate;
 
     /** 证件签发机关名称 */
     private String idorgname;
@@ -66,7 +66,7 @@ public class BusCustomerCardpipyDto implements Serializable {
     private String cimoc;
 
     /** 信息报告日期 */
-    private Timestamp rptdate;
+    private String rptdate;
 
     /** 客户编码 */
     private String customerid;

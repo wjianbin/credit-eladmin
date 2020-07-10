@@ -54,7 +54,7 @@ public class BusDelCustomerInfoDto implements Serializable {
     private String customerid;
 
     /** 上传日期 */
-    private Timestamp uploaddate;
+    private String uploaddate;
 
     /** 状态 */
     private Integer status;

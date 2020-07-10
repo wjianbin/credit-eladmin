@@ -224,12 +224,12 @@ public class BusCustomerBaseInfoServiceImpl implements BusCustomerBaseInfoServic
 
 	@Override
 	public void downloadCreditFile(List<BusCustomerBaseInfoDto> all) throws Exception {
-		if (all == null) {
+		if (all == null || all.size()==0) {
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMERBASEINFO_DECRB,
-					TaskConstants.BUS_CUSTOMER_BASEINFO + DateHelper.getCurrentTimeNoSLong()));
+			File file = new File(CreditInfoUtil.downloadFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMERBASEINFO_DECRB+ DateHelper.getCurrentTimeNoSLong(),
+					TaskConstants.BUS_CUSTOMER_BASEINFO ));
 			String zipPath = file.getPath() + ".zip";
 			System.out.println("zipPath:{}" + zipPath);
 			ZipUtil.zip(file.getPath(), zipPath);

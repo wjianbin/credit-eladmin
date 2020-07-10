@@ -42,7 +42,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String name;
 
     /** 证件类型 */
-    private Integer idtype;
+    private String idtype;
 
     /** 证件号码 */
     private String idnum;
@@ -51,7 +51,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String infsurccode;
 
     /** 信息报告日期 */
-    private Timestamp rptdate;
+    private String rptdate;
 
     /** 报告时点说明代码 */
     private String rptdatecode;
@@ -66,7 +66,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private Integer sex;
 
     /** 出生日期 */
-    private Timestamp dob;
+    private String dob;
 
     /** 国籍 */
     private String nation;
@@ -84,7 +84,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String email;
 
     /** 信息更新日期 */
-    private Timestamp fcsinfoupdate;
+    private String fcsinfoupdate;
 
     /** 婚姻状况 */
     private String maristatus;
@@ -93,7 +93,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String sponame;
 
     /** 配偶证件类型 */
-    private Integer spoidtype;
+    private String spoidtype;
 
     /** 配偶证件号码 */
     private String spoidnum;
@@ -105,7 +105,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String spscmpynm;
 
     /** 信息更新日期 */
-    private Timestamp spsinfoupdate;
+    private String spsinfoupdate;
 
     /** 学历 */
     private String edulevel;
@@ -114,7 +114,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String acadegree;
 
     /** 信息更新日期 */
-    private Timestamp eduinfoupdate;
+    private String eduinfoupdate;
 
     /** 就业状况 */
     private String empstatus;
@@ -150,10 +150,10 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String techtitle;
 
     /** 本单位工作起始年份 */
-    private Timestamp workstartdate;
+    private String workstartdate;
 
     /** 信息更新日期 */
-    private Timestamp octpninfoupdate;
+    private String octpninfoupdate;
 
     /** 居住状况 */
     private String resistatus;
@@ -171,7 +171,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String hometel;
 
     /** 信息更新日期 */
-    private Timestamp resiinfoupdate;
+    private String resiinfoupdate;
 
     /** 通讯地址 */
     private String mailaddr;
@@ -183,7 +183,7 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String maildist;
 
     /** 信息更新日期 */
-    private Timestamp mlginfoupdate;
+    private String mlginfoupdate;
 
     /** 自报年收入 */
     private String annlinc;
@@ -192,13 +192,13 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private String taxincome;
 
     /** 信息更新日期 */
-    private Timestamp incinfoupdate;
+    private String incinfoupdate;
 
     /** 客户编 */
     private String customerid;
 
     /** 记录日期 */
-    private Timestamp insertdate;
+    private String insertdate;
 
     /** 上报日期 */
     private Timestamp uploaddate;
@@ -213,5 +213,5 @@ public class BusCustomerBaseInfoDto implements Serializable {
     private Timestamp createTime;
 
     /** 更新日期 */
-    private Timestamp updatedate;
+    private String updatedate;
 }

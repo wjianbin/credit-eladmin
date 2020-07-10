@@ -67,7 +67,7 @@ public class BusDelCustomerInfo implements Serializable {
 
     @Column(name = "Uploaddate")
     @ApiModelProperty(value = "上传日期")
-    private Timestamp uploaddate;
+    private String uploaddate;
 
     @Column(name = "Status")
     @ApiModelProperty(value = "状态")

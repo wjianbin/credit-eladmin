@@ -15,9 +15,9 @@ public class Test {
 		// TODO Auto-generated method stub
 		InBasInf inBasInf=new InBasInf();
 		BsSgmt bsSgmt=new BsSgmt();
-		bsSgmt.setIDType(100);
+		bsSgmt.setIDType("100");
 		bsSgmt.setName("张三");
-		bsSgmt.setIDType(10);
+		bsSgmt.setIDType("10");
 		bsSgmt.setIDNum("110111198012011234");
 		bsSgmt.setRptDate(new Timestamp(System.currentTimeMillis()).toString());
 		bsSgmt.setRptDateCode("10");
@@ -86,7 +86,7 @@ public class Test {
 		busCustomerRelationship.setName("李四");
 		busCustomerRelationship.setUploadflag(1);
 		busCustomerRelationship.setUploadstatus(2);
-		busCustomerRelationship.setRptdate(new Timestamp(System.currentTimeMillis()));
+		busCustomerRelationship.setRptdate("");
 		
 		String json=JSON.toJSONString(busCustomerRelationship);
 		InFalMmbsInf inFalMmbsInf=JSON.parseObject(json, InFalMmbsInf.class);

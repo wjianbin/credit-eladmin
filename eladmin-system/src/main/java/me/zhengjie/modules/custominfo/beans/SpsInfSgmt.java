@@ -42,7 +42,7 @@ public class SpsInfSgmt implements Serializable{/**
 	    private String SpoName;
 
 	    @ApiModelProperty(value = "配偶证件类型")
-	    private Integer SpoIDType;
+	    private String SpoIDType;
 
 	    @ApiModelProperty(value = "配偶证件号码")
 	    private String SpoIDNum;

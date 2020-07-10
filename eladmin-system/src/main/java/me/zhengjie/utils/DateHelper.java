@@ -269,7 +269,7 @@ public class DateHelper {
 		return formatter.format(date);
 	}
 	public static String getCurrentTimeNoSLong() throws Exception {
-		SimpleDateFormat formatter = new SimpleDateFormat(AMR_NOMAL_DATE_FORMAT2);
+		SimpleDateFormat formatter = new SimpleDateFormat(AMR_NOMAL_DATE_FORMAT_LONG);
 		Date date = new Date();
 		return formatter.format(date);
 	}

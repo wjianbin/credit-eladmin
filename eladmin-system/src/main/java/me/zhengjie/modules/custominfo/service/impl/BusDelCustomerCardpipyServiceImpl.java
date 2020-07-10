@@ -131,8 +131,8 @@ public class BusDelCustomerCardpipyServiceImpl implements BusDelCustomerCardpipy
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadDelCustomerCardpipyFile(all, TaskConstants.TASK_NAME_DEL_CUSTOMER_CARDPIPY_DECRB,
-					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			File file = new File(CreditInfoUtil.downloadDelCustomerCardpipyFile(all, TaskConstants.TASK_NAME_DEL_CUSTOMER_CARDPIPY_DECRB+ DateHelper.getCurrentTimeNoSLong(),
+					TaskConstants.BUS_CUSTOMER_BASEINFO));
 			String zipPath = file.getPath() + ".zip";
 			ZipUtil.zip(file.getPath(), zipPath);
 			FileUtil.downloadFile(request, response, new File(zipPath), true);
