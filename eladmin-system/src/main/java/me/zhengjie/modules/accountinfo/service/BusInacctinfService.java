@@ -18,10 +18,12 @@ package me.zhengjie.modules.accountinfo.service;
 import me.zhengjie.modules.accountinfo.domain.BusInacctinf;
 import me.zhengjie.modules.accountinfo.service.dto.BusInacctinfDto;
 import me.zhengjie.modules.accountinfo.service.dto.BusInacctinfQueryCriteria;
+import me.zhengjie.modules.accountinfo.service.dto.BusUpdateInacctidcagsinfDto;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,4 +82,8 @@ public interface BusInacctinfService {
     * @throws IOException /
     */
     void download(List<BusInacctinfDto> all, HttpServletResponse response) throws IOException;
+
+    void downloadCreditFile(List<BusInacctinfDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    void downloadCreditFile(List<BusInacctinfDto> all)throws Exception;
 }

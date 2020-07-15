@@ -16,12 +16,14 @@
 package me.zhengjie.modules.accountinfo.service;
 
 import me.zhengjie.modules.accountinfo.domain.BusDelInacctentdel;
+import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelDto;
 import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctentdelDto;
 import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctentdelQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,4 +82,8 @@ public interface BusDelInacctentdelService {
     * @throws IOException /
     */
     void download(List<BusDelInacctentdelDto> all, HttpServletResponse response) throws IOException;
+
+    void downloadCreditFile(List<BusDelInacctentdelDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    void downloadCreditFile(List<BusDelInacctentdelDto> all)throws Exception;
 }

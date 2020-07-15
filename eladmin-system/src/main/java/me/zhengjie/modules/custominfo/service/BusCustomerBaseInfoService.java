@@ -15,6 +15,7 @@
 */
 package me.zhengjie.modules.custominfo.service;
 
+import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelDto;
 import me.zhengjie.modules.custominfo.domain.BusCustomerBaseInfo;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoDto;
 import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoQueryCriteria;
@@ -91,6 +92,6 @@ public interface BusCustomerBaseInfoService {
      */
     void downloadCreditFile(List<BusCustomerBaseInfoDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-	void downloadCreditFile(List<BusCustomerBaseInfoDto> all)throws Exception;
+    void downloadCreditFile(List<BusCustomerBaseInfoDto> all)throws Exception;
     	   
 }

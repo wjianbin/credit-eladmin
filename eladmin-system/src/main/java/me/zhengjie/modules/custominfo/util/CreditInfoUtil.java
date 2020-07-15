@@ -1,6 +1,21 @@
 package me.zhengjie.modules.custominfo.util;
 
-import static me.zhengjie.utils.FileUtil.SYS_TEM_DIR;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
+import me.zhengjie.modules.accountinfo.beans.InAcctDel;
+import me.zhengjie.modules.accountinfo.beans.InAcctEntDel;
+import me.zhengjie.modules.accountinfo.beans.InAcctIDCagsInf;
+import me.zhengjie.modules.accountinfo.beans.InAcctMdfc;
+import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelDto;
+import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctentdelDto;
+import me.zhengjie.modules.accountinfo.service.dto.BusUpdateAcctinfbycodeDto;
+import me.zhengjie.modules.accountinfo.service.dto.BusUpdateInacctidcagsinfDto;
+import me.zhengjie.modules.custominfo.beans.*;
+import me.zhengjie.modules.custominfo.service.dto.*;
+import me.zhengjie.modules.quartz.constant.TaskConstants;
+import me.zhengjie.utils.DateHelper;
+import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.XMLUtil;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -9,45 +24,8 @@ import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-
-import com.alibaba.fastjson.JSON;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.modules.creditsystem.domain.BusSystemSetup;
-import me.zhengjie.modules.custominfo.beans.BsSgmt;
-import me.zhengjie.modules.custominfo.beans.EduInfSgmt;
-import me.zhengjie.modules.custominfo.beans.FcsInfSgmt;
-import me.zhengjie.modules.custominfo.beans.IDRec;
-import me.zhengjie.modules.custominfo.beans.IDSgmt;
-import me.zhengjie.modules.custominfo.beans.InBasInf;
-import me.zhengjie.modules.custominfo.beans.InBsInfDlt;
-import me.zhengjie.modules.custominfo.beans.InCtfItgInf;
-import me.zhengjie.modules.custominfo.beans.InFalMmbsInf;
-import me.zhengjie.modules.custominfo.beans.InIDEfctInf;
-import me.zhengjie.modules.custominfo.beans.InIDEfctInfDlt;
-import me.zhengjie.modules.custominfo.beans.IncInfSgmt;
-import me.zhengjie.modules.custominfo.beans.MlgInfSgmt;
-import me.zhengjie.modules.custominfo.beans.OctpnInfSgmt;
-import me.zhengjie.modules.custominfo.beans.RedncInfSgmt;
-import me.zhengjie.modules.custominfo.beans.SpsInfSgmt;
-import me.zhengjie.modules.custominfo.service.dto.BusCustomerBaseInfoDto;
-import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardinfosDto;
-import me.zhengjie.modules.custominfo.service.dto.BusCustomerCardpipyDto;
-import me.zhengjie.modules.custominfo.service.dto.BusCustomerRelationshipDto;
-import me.zhengjie.modules.custominfo.service.dto.BusDelCustomerCardpipyDto;
-import me.zhengjie.modules.custominfo.service.dto.BusDelCustomerInfoDto;
-import me.zhengjie.modules.quartz.constant.TaskConstants;
-import me.zhengjie.modules.security.config.bean.SecurityProperties;
-import me.zhengjie.modules.security.security.TokenProvider;
-import me.zhengjie.modules.security.service.OnlineUserService;
-import me.zhengjie.utils.DateHelper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.RedisUtils;
-import me.zhengjie.utils.XMLUtil;
+import static me.zhengjie.utils.FileUtil.SYS_TEM_DIR;
 
 /**
  * 
@@ -452,6 +430,147 @@ public class CreditInfoUtil {
 			String json=JSON.toJSONString(busDelCustomerInfoDto);
 			InBsInfDlt inBsInfDlt=JSON.parseObject(json, InBsInfDlt.class);
 			sb.append(XMLUtil.convertToXml(inBsInfDlt));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadDel_InacctdelFile(List<BusDelInacctdelDto> all, String pagName, String busType)throws Exception  {
+
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusDelInacctdelDto busDelInacctdelDto : all) {
+			String json=JSON.toJSONString(busDelInacctdelDto);
+			InAcctDel inAcctDel=JSON.parseObject(json, InAcctDel.class);
+			sb.append(XMLUtil.convertToXml(inAcctDel));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadDelInacctentdelFile(List<BusDelInacctentdelDto> all, String pagName, String busType) throws Exception {
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusDelInacctentdelDto busDelInacctentdelDto : all) {
+			String json=JSON.toJSONString(busDelInacctentdelDto);
+			InAcctEntDel inAcctEntDel=JSON.parseObject(json, InAcctEntDel.class);
+			sb.append(XMLUtil.convertToXml(inAcctEntDel));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadUpdateAcctinfbycodeFile(List<BusUpdateAcctinfbycodeDto> all, String pagName, String busType) throws Exception{
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusUpdateAcctinfbycodeDto busUpdateAcctinfbycodeDto : all) {
+			String json=JSON.toJSONString(busUpdateAcctinfbycodeDto);
+			InAcctEntDel inAcctEntDel=JSON.parseObject(json, InAcctEntDel.class);
+			sb.append(XMLUtil.convertToXml(inAcctEntDel));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadUpdateInacctidcagsinfxFile(List<BusUpdateInacctidcagsinfDto> all, String pagName, String busType)throws Exception {
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusUpdateInacctidcagsinfDto busUpdateInacctidcagsinfDto : all) {
+			String json=JSON.toJSONString(busUpdateInacctidcagsinfDto);
+			InAcctMdfc inAcctMdfc=JSON.parseObject(json, InAcctMdfc.class);
+			sb.append(XMLUtil.convertToXml(inAcctMdfc));
 			sb.append("\n");
 		}
 		sb.substring(0, sb.length() - 1);

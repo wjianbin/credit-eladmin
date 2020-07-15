@@ -15,28 +15,32 @@
 */
 package me.zhengjie.modules.accountinfo.service.impl;
 
-import me.zhengjie.modules.accountinfo.domain.BusDelInacctdel;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ZipUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.exception.BadRequestException;
+import me.zhengjie.modules.accountinfo.domain.BusDelInacctdel;
 import me.zhengjie.modules.accountinfo.repository.BusDelInacctdelRepository;
 import me.zhengjie.modules.accountinfo.service.BusDelInacctdelService;
 import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelDto;
 import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelQueryCriteria;
 import me.zhengjie.modules.accountinfo.service.mapstruct.BusDelInacctdelMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.util.IdUtil;
+import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
+import me.zhengjie.modules.quartz.constant.TaskConstants;
+import me.zhengjie.utils.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @website https://el-admin.vip
@@ -110,5 +114,37 @@ public class BusDelInacctdelServiceImpl implements BusDelInacctdelService {
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusDelInacctdelDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (all == null) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadDel_InacctdelFile(all, TaskConstants.Task_Bus_Del_Inacctdel+ DateHelper.getCurrentTimeNoSLong(),
+                    TaskConstants.Bus_Del_Inacctdel));
+            String zipPath = file.getPath() + ".zip";
+            ZipUtil.zip(file.getPath(), zipPath);
+            FileUtil.downloadFile(request, response, new File(zipPath), true);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusDelInacctdelDto> all) throws Exception {
+        if (all == null || all.size()==0) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadDel_InacctdelFile(all, TaskConstants.Task_Bus_Del_Inacctdel+ DateHelper.getCurrentTimeNoSLong(),
+                    TaskConstants.Bus_Del_Inacctdel ));
+            String zipPath = file.getPath() + ".zip";
+            System.out.println("zipPath:{}" + zipPath);
+            ZipUtil.zip(file.getPath(), zipPath);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
     }
 }

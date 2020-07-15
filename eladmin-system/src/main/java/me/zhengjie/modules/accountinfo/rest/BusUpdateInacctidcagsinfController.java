@@ -28,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -47,8 +48,9 @@ public class BusUpdateInacctidcagsinfController {
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('busUpdateInacctidcagsinf:list')")
-    public void download(HttpServletResponse response, BusUpdateInacctidcagsinfQueryCriteria criteria) throws IOException {
-        busUpdateInacctidcagsinfService.download(busUpdateInacctidcagsinfService.queryAll(criteria), response);
+    public void download(HttpServletRequest request,HttpServletResponse response, BusUpdateInacctidcagsinfQueryCriteria criteria) throws Exception {
+        //busUpdateInacctidcagsinfService.download(busUpdateInacctidcagsinfService.queryAll(criteria), response);
+        busUpdateInacctidcagsinfService.downloadCreditFile(busUpdateInacctidcagsinfService.queryAll(criteria),request,response);
     }
 
     @GetMapping
