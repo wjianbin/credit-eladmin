@@ -33,7 +33,7 @@ public class BusCustomerCardpipyDto implements Serializable {
     /** id */
     /** 防止精度丢失 */
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long id1;
+    private Long id;
 
     /** 信息记录类型 */
     private String infrectype;

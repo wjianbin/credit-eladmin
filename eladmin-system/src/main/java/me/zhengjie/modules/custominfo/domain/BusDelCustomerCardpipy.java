@@ -73,7 +73,7 @@ public class BusDelCustomerCardpipy implements Serializable {
     @ApiModelProperty(value = "上报状态")
     private Integer uploadstats;
 
-    @Column(name = "Ureate_time")
+    @Column(name = "Create_time")
     @ApiModelProperty(value = "create_time")
     private Timestamp createTime;
 

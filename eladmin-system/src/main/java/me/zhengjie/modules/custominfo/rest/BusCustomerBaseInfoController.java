@@ -52,8 +52,10 @@ public class BusCustomerBaseInfoController {
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('busCustomerBaseInfo:list')")
-    public void download(HttpServletResponse response, BusCustomerBaseInfoQueryCriteria criteria) throws IOException {
-        busCustomerBaseInfoService.download(busCustomerBaseInfoService.queryAll(criteria), response);
+    public void download(HttpServletRequest request, HttpServletResponse response, BusCustomerBaseInfoQueryCriteria criteria) throws Exception {
+        List<BusCustomerBaseInfoDto> all= busCustomerBaseInfoService.queryAll(criteria);
+        busCustomerBaseInfoService.downloadCreditFile(all,  request,  response);
+        //busCustomerBaseInfoService.downloadCreditFile(busCustomerBaseInfoService.queryAll(criteria), HttpServletRequest request, HttpServletResponse response);
     }
 
     @GetMapping

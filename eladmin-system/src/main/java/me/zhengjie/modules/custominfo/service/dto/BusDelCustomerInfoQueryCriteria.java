@@ -34,6 +34,8 @@ public class BusDelCustomerInfoQueryCriteria{
     private String customerid; 
     @Query
     private Timestamp createTime;
-    
+
+    @Query
+    private Integer status;
     
 }

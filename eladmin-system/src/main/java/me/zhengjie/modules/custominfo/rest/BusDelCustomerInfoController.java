@@ -18,6 +18,7 @@ package me.zhengjie.modules.custominfo.rest;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.custominfo.domain.BusDelCustomerInfo;
 import me.zhengjie.modules.custominfo.service.BusDelCustomerInfoService;
+import me.zhengjie.modules.custominfo.service.dto.BusDelCustomerInfoDto;
 import me.zhengjie.modules.custominfo.service.dto.BusDelCustomerInfoQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -47,8 +50,10 @@ public class BusDelCustomerInfoController {
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('busDelCustomerInfo:list')")
-    public void download(HttpServletResponse response, BusDelCustomerInfoQueryCriteria criteria) throws IOException {
-        busDelCustomerInfoService.download(busDelCustomerInfoService.queryAll(criteria), response);
+    public void download(HttpServletRequest request,HttpServletResponse response, BusDelCustomerInfoQueryCriteria criteria) throws Exception {
+        //busDelCustomerInfoService.download(busDelCustomerInfoService.queryAll(criteria), response);
+        List<BusDelCustomerInfoDto>  all= busDelCustomerInfoService.queryAll(criteria);
+        busDelCustomerInfoService.downloadCreditFile(all,request,response);
     }
 
     @GetMapping

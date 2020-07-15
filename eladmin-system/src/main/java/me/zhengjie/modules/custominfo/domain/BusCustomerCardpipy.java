@@ -36,10 +36,10 @@ import java.io.Serializable;
 public class BusCustomerCardpipy implements Serializable {
 
     @Id
-    @Column(name = "id1")
+    @Column(name = "id")
     @ApiModelProperty(value = "id", hidden = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id1;
+    private Long id;
 
     @Column(name = "InfRecType")
     @ApiModelProperty(value = "信息记录类型")
@@ -97,9 +97,9 @@ public class BusCustomerCardpipy implements Serializable {
     @ApiModelProperty(value = "上报标识")
     private Integer uploadflag;
 
-    @Column(name = "Ureate_time")
+    @Column(name = "Create_time")
     @ApiModelProperty(value = "create_time")
-    private Timestamp ureateTime;
+    private Timestamp createTime;
 
     public void copy(BusCustomerCardpipy source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

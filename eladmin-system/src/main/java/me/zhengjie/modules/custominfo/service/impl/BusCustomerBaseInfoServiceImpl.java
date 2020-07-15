@@ -212,8 +212,8 @@ public class BusCustomerBaseInfoServiceImpl implements BusCustomerBaseInfoServic
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMERBASEINFO_DECRB,
-					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			File file = new File(CreditInfoUtil.downloadFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMERBASEINFO+ DateHelper.getCurrentTimeNoSLong(),
+					TaskConstants.BUS_CUSTOMER_BASEINFO));
 			String zipPath = file.getPath() + ".zip";
 			ZipUtil.zip(file.getPath(), zipPath);
 			FileUtil.downloadFile(request, response, new File(zipPath), true);
@@ -228,7 +228,7 @@ public class BusCustomerBaseInfoServiceImpl implements BusCustomerBaseInfoServic
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMERBASEINFO_DECRB+ DateHelper.getCurrentTimeNoSLong(),
+			File file = new File(CreditInfoUtil.downloadFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMERBASEINFO+ DateHelper.getCurrentTimeNoSLong(),
 					TaskConstants.BUS_CUSTOMER_BASEINFO ));
 			String zipPath = file.getPath() + ".zip";
 			System.out.println("zipPath:{}" + zipPath);

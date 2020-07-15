@@ -81,7 +81,7 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
     @Transactional
     public BusCustomerCardpipyDto findById(Long id1) {
         BusCustomerCardpipy busCustomerCardpipy = busCustomerCardpipyRepository.findById(id1).orElseGet(BusCustomerCardpipy::new);
-        ValidationUtil.isNull(busCustomerCardpipy.getId1(),"BusCustomerCardpipy","id1",id1);
+        ValidationUtil.isNull(busCustomerCardpipy.getId(),"BusCustomerCardpipy","id1",id1);
         return busCustomerCardpipyMapper.toDto(busCustomerCardpipy);
     }
 
@@ -89,15 +89,15 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
     @Transactional(rollbackFor = Exception.class)
     public BusCustomerCardpipyDto create(BusCustomerCardpipy resources) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId1(snowflake.nextId()); 
+        resources.setId(snowflake.nextId());
         return busCustomerCardpipyMapper.toDto(busCustomerCardpipyRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(BusCustomerCardpipy resources) {
-        BusCustomerCardpipy busCustomerCardpipy = busCustomerCardpipyRepository.findById(resources.getId1()).orElseGet(BusCustomerCardpipy::new);
-        ValidationUtil.isNull( busCustomerCardpipy.getId1(),"BusCustomerCardpipy","id",resources.getId1());
+        BusCustomerCardpipy busCustomerCardpipy = busCustomerCardpipyRepository.findById(resources.getId()).orElseGet(BusCustomerCardpipy::new);
+        ValidationUtil.isNull( busCustomerCardpipy.getId(),"BusCustomerCardpipy","id",resources.getId());
         busCustomerCardpipy.copy(resources);
         busCustomerCardpipyRepository.save(busCustomerCardpipy);
     }
@@ -119,6 +119,7 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
             busDelCustomerCardpipy.setInfsurccode(busCustomerCardpipy.getCustomerid());
             busDelCustomerCardpipy.setCustomerid(busCustomerCardpipy.getCustomerid());
             busDelCustomerCardpipy.setUploadstats(0);
+            busDelCustomerCardpipy.setUploaddate(busCustomerCardpipy.getUploaddate());
             busDelCustomerCardpipy.setCreateTime(new Timestamp(System.currentTimeMillis()));
             
             busDelCustomerCardpipyRepository.save(busDelCustomerCardpipy);
@@ -158,7 +159,7 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadCustomerCardpipyFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_CARDPIPY_DECRB+ DateHelper.getCurrentTimeNoSLong(),
+			File file = new File(CreditInfoUtil.downloadCustomerCardpipyFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_CARDPIPY+ DateHelper.getCurrentTimeNoSLong(),
 					TaskConstants.BUS_CUSTOMER_BASEINFO));
 			String zipPath = file.getPath() + ".zip";
 			ZipUtil.zip(file.getPath(), zipPath);
@@ -175,8 +176,8 @@ public class BusCustomerCardpipyServiceImpl implements BusCustomerCardpipyServic
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadCustomerCardpipyFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_CARDPIPY_DECRB,
-					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			File file = new File(CreditInfoUtil.downloadCustomerCardpipyFile(all, TaskConstants.TASK_NAME_NEW_CUSTOMER_CARDPIPY+ DateHelper.getCurrentTimeNoSLong(),
+					TaskConstants.BUS_CUSTOMER_BASEINFO));
 			String zipPath = file.getPath() + ".zip";
 			ZipUtil.zip(file.getPath(), zipPath);
 		} catch (IOException e) {

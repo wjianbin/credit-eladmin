@@ -131,7 +131,7 @@ public class BusDelCustomerInfoServiceImpl implements BusDelCustomerInfoService 
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadDelCustomerInfoFile(all, TaskConstants.TASK_NAME_DEL_CUSTOMER_CARDPIPY_DECRB+ DateHelper.getCurrentTimeNoSLong(),
+			File file = new File(CreditInfoUtil.downloadDelCustomerInfoFile(all, TaskConstants.TASK_NAME_DEL_CUSTOMER_CARDPIPY+ DateHelper.getCurrentTimeNoSLong(),
 					TaskConstants.BUS_CUSTOMER_BASEINFO));
 			String zipPath = file.getPath() + ".zip";
 			ZipUtil.zip(file.getPath(), zipPath);
@@ -148,8 +148,8 @@ public class BusDelCustomerInfoServiceImpl implements BusDelCustomerInfoService 
 			throw new BadRequestException("请选择数据");
 		}
 		try {
-			File file = new File(CreditInfoUtil.downloadDelCustomerInfoFile(all, TaskConstants.TASK_NAME_DEL_CUSTOMER_CARDPIPY_DECRB,
-					TaskConstants.BUS_CUSTOMER_BASEINFO+ DateHelper.getCurrentTimeNoSLong()));
+			File file = new File(CreditInfoUtil.downloadDelCustomerInfoFile(all, TaskConstants.TASK_NAME_DEL_CUSTOMER_CARDPIPY+ DateHelper.getCurrentTimeNoSLong(),
+					TaskConstants.BUS_CUSTOMER_BASEINFO));
 			String zipPath = file.getPath() + ".zip";
 			ZipUtil.zip(file.getPath(), zipPath);
 		} catch (IOException e) {
