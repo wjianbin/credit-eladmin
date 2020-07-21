@@ -14,7 +14,7 @@ import lombok.Data;
 //XML文件中的根标识  
 @XmlRootElement(name = "MdfcSgmt")
 //控制JAXB 绑定类中属性和字段的排序  
-@XmlType(propOrder = { "AcctBsInfSgmt", "AcctBsInfSgmt", "RltRepymtInfSgm", "MotgaCltalCtrctInfSgmt", "AcctCredSgmt",
+@XmlType(propOrder = { "AcctBsSgmt", "AcctBsInfSgmt", "RltRepymtInfSgm", "MotgaCltalCtrctInfSgmt", "AcctCredSgmt",
 		"OrigCreditorInfSgmt", "AcctMthlyBlgInfSgmt", "SpecPrdSgmt", "AcctDbtInfSgmt", "AcctSpecTrstDspnSgmt" })
 public class MdfcSgmt implements Serializable {
 	/**

@@ -18,10 +18,12 @@ package me.zhengjie.modules.contract.service;
 import me.zhengjie.modules.contract.domain.BusDelInctrctdel;
 import me.zhengjie.modules.contract.service.dto.BusDelInctrctdelDto;
 import me.zhengjie.modules.contract.service.dto.BusDelInctrctdelQueryCriteria;
+import me.zhengjie.modules.contract.service.dto.BusDelInctrctentdelDto;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,4 +82,8 @@ public interface BusDelInctrctdelService {
     * @throws IOException /
     */
     void download(List<BusDelInctrctdelDto> all, HttpServletResponse response) throws IOException;
+
+    void downloadCreditFile(List<BusDelInctrctdelDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    void downloadCreditFile(List<BusDelInctrctdelDto> all)throws Exception;
 }

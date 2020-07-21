@@ -54,7 +54,7 @@ public interface BusDelInacctdelService {
      * @param id ID
      * @return BusDelInacctdelDto
      */
-    BusDelInacctdelDto findById(String id);
+    BusDelInacctdelDto findById(Long id);
 
     /**
     * 创建
@@ -73,7 +73,7 @@ public interface BusDelInacctdelService {
     * 多选删除
     * @param ids /
     */
-    void deleteAll(String[] ids);
+    void deleteAll(Long[] ids);
 
     /**
     * 导出数据

@@ -15,6 +15,7 @@
 */
 package me.zhengjie.modules.accountinfo.service.impl;
 
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ZipUtil;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class BusDelInacctdelServiceImpl implements BusDelInacctdelService {
 
     @Override
     @Transactional
-    public BusDelInacctdelDto findById(String id) {
+    public BusDelInacctdelDto findById(Long id) {
         BusDelInacctdel busDelInacctdel = busDelInacctdelRepository.findById(id).orElseGet(BusDelInacctdel::new);
         ValidationUtil.isNull(busDelInacctdel.getId(),"BusDelInacctdel","id",id);
         return busDelInacctdelMapper.toDto(busDelInacctdel);
@@ -77,7 +78,9 @@ public class BusDelInacctdelServiceImpl implements BusDelInacctdelService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BusDelInacctdelDto create(BusDelInacctdel resources) {
-        resources.setId(IdUtil.simpleUUID()); 
+        Snowflake snowflake = IdUtil.createSnowflake(1, 1);
+        resources.setId(snowflake.nextId());
+        resources.setInfrectype(213);
         return busDelInacctdelMapper.toDto(busDelInacctdelRepository.save(resources));
     }
 
@@ -91,8 +94,8 @@ public class BusDelInacctdelServiceImpl implements BusDelInacctdelService {
     }
 
     @Override
-    public void deleteAll(String[] ids) {
-        for (String id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             busDelInacctdelRepository.deleteById(id);
         }
     }

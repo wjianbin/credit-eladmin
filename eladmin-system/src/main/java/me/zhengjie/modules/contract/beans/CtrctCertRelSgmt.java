@@ -1,6 +1,7 @@
 package me.zhengjie.modules.contract.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,5 +27,5 @@ public class CtrctCertRelSgmt implements Serializable{
 	private static final long serialVersionUID = 4462397797075683911L;
 		@ApiModelProperty(value = "共同受信人个数")
 	    private Integer BrerNm;
-	    private CtrctCertRel CtrctCertRel;
+	    private List<CtrctCertRel> CtrctCertRel;
 }

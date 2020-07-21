@@ -15,6 +15,7 @@
 */
 package me.zhengjie.modules.contract.service;
 
+import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelDto;
 import me.zhengjie.modules.contract.domain.BusUpdateInctrctidcagsinf;
 import me.zhengjie.modules.contract.service.dto.BusUpdateInctrctidcagsinfDto;
 import me.zhengjie.modules.contract.service.dto.BusUpdateInctrctidcagsinfQueryCriteria;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,4 +82,8 @@ public interface BusUpdateInctrctidcagsinfService {
     * @throws IOException /
     */
     void download(List<BusUpdateInctrctidcagsinfDto> all, HttpServletResponse response) throws IOException;
+
+    void downloadCreditFile(List<BusUpdateInctrctidcagsinfDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    void downloadCreditFile(List<BusUpdateInctrctidcagsinfDto> all)throws Exception;
 }

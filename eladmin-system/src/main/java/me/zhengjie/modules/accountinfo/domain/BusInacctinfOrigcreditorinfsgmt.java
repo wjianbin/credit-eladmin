@@ -37,7 +37,8 @@ public class BusInacctinfOrigcreditorinfsgmt implements Serializable {
 
     @Id
     @Column(name = "id")
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "AccLoanId")
@@ -64,11 +65,11 @@ public class BusInacctinfOrigcreditorinfsgmt implements Serializable {
     @ApiModelProperty(value = "债权转移时的还款状态")
     private Integer initrpysts;
 
-    @Column(name = "uploadStatus")
+    @Column(name = "UploadStatus")
     @ApiModelProperty(value = "上报状态")
     private Integer uploadstatus;
 
-    @Column(name = "uploadFlag")
+    @Column(name = "UploadFlag")
     @ApiModelProperty(value = "上报标识")
     private Integer uploadflag;
 

@@ -37,7 +37,8 @@ public class BusUpdateAcctinfbycode implements Serializable {
 
     @Id
     @Column(name = "id")
-    @ApiModelProperty(value = "编号")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "AccLoanId")

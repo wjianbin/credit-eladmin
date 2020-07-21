@@ -26,4 +26,8 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusInctrctinfCreditlimsgmtQueryCriteria{
+
+    /** 精确 */
+    @Query
+    private Long busId;
 }

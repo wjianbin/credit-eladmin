@@ -18,10 +18,12 @@ package me.zhengjie.modules.contract.service;
 import me.zhengjie.modules.contract.domain.BusInctrctinfCtrctcertrel;
 import me.zhengjie.modules.contract.service.dto.BusInctrctinfCtrctcertrelDto;
 import me.zhengjie.modules.contract.service.dto.BusInctrctinfCtrctcertrelQueryCriteria;
+import me.zhengjie.modules.contract.service.dto.BusInctrctinfCtrctcertrelsgmtDto;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,4 +82,9 @@ public interface BusInctrctinfCtrctcertrelService {
     * @throws IOException /
     */
     void download(List<BusInctrctinfCtrctcertrelDto> all, HttpServletResponse response) throws IOException;
+
+    void downloadCreditFile(List<BusInctrctinfCtrctcertrelDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    void downloadCreditFile(List<BusInctrctinfCtrctcertrelDto> all)throws Exception;
+
 }

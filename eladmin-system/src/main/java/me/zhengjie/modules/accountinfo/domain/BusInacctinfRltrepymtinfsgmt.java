@@ -37,7 +37,8 @@ public class BusInacctinfRltrepymtinfsgmt implements Serializable {
 
     @Id
     @Column(name = "rit_id")
-    @ApiModelProperty(value = "rit_id")
+    @ApiModelProperty(value = "rit_id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ritId;
 
     @Column(name = "AccLoanId")

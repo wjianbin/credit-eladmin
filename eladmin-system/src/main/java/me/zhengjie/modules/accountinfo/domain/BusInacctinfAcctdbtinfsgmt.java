@@ -19,10 +19,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -47,7 +44,8 @@ public class BusInacctinfAcctdbtinfsgmt implements Serializable {
 
 	@Id
     @Column(name = "id")
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "AccLoanId")

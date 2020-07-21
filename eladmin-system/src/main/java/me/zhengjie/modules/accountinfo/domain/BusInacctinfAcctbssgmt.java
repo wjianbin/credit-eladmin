@@ -37,7 +37,8 @@ public class BusInacctinfAcctbssgmt implements Serializable {
 
     @Id
     @Column(name = "id")
-    @ApiModelProperty(value = "编号")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "AccLoanId")
@@ -54,7 +55,7 @@ public class BusInacctinfAcctbssgmt implements Serializable {
 
     @Column(name = "AcctType")
     @ApiModelProperty(value = "账户类型")
-    private Integer accttype;
+    private String accttype;
 
     @Column(name = "AcctCode")
     @ApiModelProperty(value = "个人账户标识码")

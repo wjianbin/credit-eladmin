@@ -45,7 +45,7 @@ public class BusInacctinfAcctbssgmtDto implements Serializable {
     private Integer infrectype;
 
     /** 账户类型 */
-    private Integer accttype;
+    private String accttype;
 
     /** 个人账户标识码 */
     private String acctcode;

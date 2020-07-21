@@ -45,4 +45,22 @@ public class BusInacctinfDto implements Serializable {
     private Timestamp updatetime;
 
     private Timestamp uploadtime;
+
+    private  BusInacctinfAcctbssgmtDto busInacctinfAcctbssgmtDto;
+
+    private  BusInacctinfAcctbsinfsgmtDto busInacctinfAcctbsinfsgmtDto;
+
+    private BusInacctinfRltrepymtinfsgmtDto busInacctinfRltrepymtinfsgmtDto;
+
+    private  BusInacctinfGuarmotgacltalctrctinfsgmtDto busInacctinfGuarmotgacltalctrctinfsgmtDto;
+
+    private BusInacctinfAcctcredsgmtDto busInacctinfAcctcredsgmtDto;
+
+    private  BusInacctinfOrigcreditorinfsgmtDto busInacctinfOrigcreditorinfsgmtDto;
+
+    private  BusInacctinfAcctmthlyblginfsgmtDto busInacctinfAcctmthlyblginfsgmtDto;
+
+    private  BusInacctinfAcctdbtinfsgmtDto busInacctinfAcctdbtinfsgmtDto;
+
+    private BusInacctinfAcctspectrstdspnsgmtDto busInacctinfAcctspectrstdspnsgmtDto;
 }

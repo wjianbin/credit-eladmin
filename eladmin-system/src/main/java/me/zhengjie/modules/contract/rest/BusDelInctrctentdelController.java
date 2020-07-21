@@ -28,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -47,8 +48,9 @@ public class BusDelInctrctentdelController {
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('busDelInctrctentdel:list')")
-    public void download(HttpServletResponse response, BusDelInctrctentdelQueryCriteria criteria) throws IOException {
-        busDelInctrctentdelService.download(busDelInctrctentdelService.queryAll(criteria), response);
+    public void download(HttpServletRequest request,HttpServletResponse response, BusDelInctrctentdelQueryCriteria criteria) throws Exception {
+        //busDelInctrctentdelService.download(busDelInctrctentdelService.queryAll(criteria), response);
+        busDelInctrctentdelService.downloadCreditFile(busDelInctrctentdelService.queryAll(criteria),request,response);
     }
 
     @GetMapping

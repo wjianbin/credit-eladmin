@@ -26,4 +26,7 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusDelInacctentdelQueryCriteria{
+    /** 对应业务操作的主键 */
+    @Query
+    private Long busId;
 }

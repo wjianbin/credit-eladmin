@@ -26,4 +26,9 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusInctrctinfCtrctbssgmtQueryCriteria{
+
+    /** 对应业务操作的主键 */
+    /** 精确 */
+    @Query
+    private Long busId;
 }

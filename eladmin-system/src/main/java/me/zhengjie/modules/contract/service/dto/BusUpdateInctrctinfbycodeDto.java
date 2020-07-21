@@ -57,4 +57,10 @@ public class BusUpdateInctrctinfbycodeDto implements Serializable {
     private Integer uploadflag;
 
     private Timestamp createTime;
+    //基础段
+    private BusInctrctinfCtrctbssgmtDto busInctrctinfCtrctbssgmtDto;
+
+    private BusInctrctinfCreditlimsgmtDto busInctrctinfCreditlimsgmtDto;
+
+    private BusInctrctinfCtrctcertrelsgmtDto busInctrctinfCtrctcertrelsgmtDto;
 }

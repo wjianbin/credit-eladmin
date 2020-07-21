@@ -1,6 +1,7 @@
 package me.zhengjie.modules.accountinfo.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,6 +27,6 @@ public class RltRepymtInfSgm implements Serializable{
 		@ApiModelProperty(value = "责任人个数")
 	    private Integer RltRepymtNm;
 	 
-	    private RltRepymtInf RltRepymtInf;
+	    private List<RltRepymtInf> RltRepymtInf;
 
 }

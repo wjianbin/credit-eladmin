@@ -1,6 +1,7 @@
 package me.zhengjie.modules.accountinfo.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,5 +24,5 @@ public class MotgaCltalCtrctInfSgmt implements Serializable{/**
 	private static final long serialVersionUID = -1126798529930691365L;
 	    @ApiModelProperty(value = "抵质押合同个数")
 	    private Integer CcNm;
-	    private CccInf CccInf;
+	    private List<CccInf> CccInf;
 }

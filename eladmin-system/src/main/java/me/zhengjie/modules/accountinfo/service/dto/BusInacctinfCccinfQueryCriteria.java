@@ -26,4 +26,7 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusInacctinfCccinfQueryCriteria{
+    /** id */
+    @Query
+    private Long guaId;
 }

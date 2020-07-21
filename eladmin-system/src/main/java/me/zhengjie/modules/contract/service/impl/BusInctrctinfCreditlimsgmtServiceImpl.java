@@ -35,6 +35,7 @@ import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -117,5 +118,15 @@ public class BusInctrctinfCreditlimsgmtServiceImpl implements BusInctrctinfCredi
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusInctrctinfCreditlimsgmtDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusInctrctinfCreditlimsgmtDto> all) throws Exception {
+
     }
 }

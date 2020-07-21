@@ -30,7 +30,7 @@ public class AcctBsSgmt implements Serializable{
     private Integer InfRecType;
 
     @ApiModelProperty(value = "账户类型")
-    private Integer AcctType;
+    private String AcctType;
 
     @ApiModelProperty(value = "个人账户标识码")
     private String AcctCode;

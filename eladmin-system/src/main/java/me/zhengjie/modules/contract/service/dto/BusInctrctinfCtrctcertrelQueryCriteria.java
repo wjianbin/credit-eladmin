@@ -26,4 +26,8 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusInctrctinfCtrctcertrelQueryCriteria{
+    /** 共同受_id */
+    @Query
+    private Long ctrId;
+
 }

@@ -16,6 +16,9 @@
 package me.zhengjie.modules.contract.service.impl;
 
 import me.zhengjie.modules.contract.domain.BusInctrctinfCtrctcertrelsgmt;
+import me.zhengjie.modules.contract.repository.BusInctrctinfCtrctcertrelRepository;
+import me.zhengjie.modules.contract.service.dto.BusInctrctinfCtrctcertrelQueryCriteria;
+import me.zhengjie.modules.contract.service.mapstruct.BusInctrctinfCtrctcertrelMapper;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -51,6 +55,8 @@ public class BusInctrctinfCtrctcertrelsgmtServiceImpl implements BusInctrctinfCt
 
     private final BusInctrctinfCtrctcertrelsgmtRepository busInctrctinfCtrctcertrelsgmtRepository;
     private final BusInctrctinfCtrctcertrelsgmtMapper busInctrctinfCtrctcertrelsgmtMapper;
+    private final BusInctrctinfCtrctcertrelRepository busInctrctinfCtrctcertrelRepository;
+    private final BusInctrctinfCtrctcertrelMapper busInctrctinfCtrctcertrelMapper;
 
     @Override
     public Map<String,Object> queryAll(BusInctrctinfCtrctcertrelsgmtQueryCriteria criteria, Pageable pageable){
@@ -60,7 +66,13 @@ public class BusInctrctinfCtrctcertrelsgmtServiceImpl implements BusInctrctinfCt
 
     @Override
     public List<BusInctrctinfCtrctcertrelsgmtDto> queryAll(BusInctrctinfCtrctcertrelsgmtQueryCriteria criteria){
-        return busInctrctinfCtrctcertrelsgmtMapper.toDto(busInctrctinfCtrctcertrelsgmtRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+           List<BusInctrctinfCtrctcertrelsgmtDto>  busInctrctinfCtrctcertrelsgmtDtolis=busInctrctinfCtrctcertrelsgmtMapper.toDto(busInctrctinfCtrctcertrelsgmtRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        for(BusInctrctinfCtrctcertrelsgmtDto bean:busInctrctinfCtrctcertrelsgmtDtolis){
+            BusInctrctinfCtrctcertrelQueryCriteria busInctrctinfCtrctcertrelQueryCriteria=new BusInctrctinfCtrctcertrelQueryCriteria();
+            busInctrctinfCtrctcertrelQueryCriteria.setCtrId(bean.getId());
+            bean.setBusInctrctinfCtrctcertrelDto(busInctrctinfCtrctcertrelMapper.toDto(busInctrctinfCtrctcertrelRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,busInctrctinfCtrctcertrelQueryCriteria,criteriaBuilder))));
+        }
+        return busInctrctinfCtrctcertrelsgmtDtolis;
     }
 
     @Override
@@ -109,5 +121,15 @@ public class BusInctrctinfCtrctcertrelsgmtServiceImpl implements BusInctrctinfCt
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusInctrctinfCtrctcertrelsgmtDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusInctrctinfCtrctcertrelsgmtDto> all) throws Exception {
+
     }
 }

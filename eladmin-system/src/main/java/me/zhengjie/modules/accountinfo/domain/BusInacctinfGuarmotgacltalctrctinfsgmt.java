@@ -37,7 +37,8 @@ public class BusInacctinfGuarmotgacltalctrctinfsgmt implements Serializable {
 
     @Id
     @Column(name = "Gua_id")
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "id", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long guaId;
 
     @Column(name = "AccLoanId")

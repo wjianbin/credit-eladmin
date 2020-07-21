@@ -79,7 +79,8 @@ public class BusUpdateInacctidcagsinfServiceImpl implements BusUpdateInacctidcag
     @Transactional(rollbackFor = Exception.class)
     public BusUpdateInacctidcagsinfDto create(BusUpdateInacctidcagsinf resources) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId(snowflake.nextId()); 
+        resources.setId(snowflake.nextId());
+        resources.setInfrectype(211);
         return busUpdateInacctidcagsinfMapper.toDto(busUpdateInacctidcagsinfRepository.save(resources));
     }
 

@@ -15,14 +15,23 @@
 */
 package me.zhengjie.modules.contract.service.impl;
 
+import cn.hutool.core.util.ZipUtil;
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.contract.domain.BusInctrctinf;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.modules.contract.repository.BusInctrctinfCreditlimsgmtRepository;
+import me.zhengjie.modules.contract.repository.BusInctrctinfCtrctbssgmtRepository;
+import me.zhengjie.modules.contract.repository.BusInctrctinfCtrctcertrelsgmtRepository;
+import me.zhengjie.modules.contract.service.BusInctrctinfCtrctcertrelsgmtService;
+import me.zhengjie.modules.contract.service.dto.*;
+import me.zhengjie.modules.contract.service.mapstruct.BusInctrctinfCreditlimsgmtMapper;
+import me.zhengjie.modules.contract.service.mapstruct.BusInctrctinfCtrctbssgmtMapper;
+import me.zhengjie.modules.contract.service.mapstruct.BusInctrctinfCtrctcertrelsgmtMapper;
+import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
+import me.zhengjie.modules.quartz.constant.TaskConstants;
+import me.zhengjie.utils.*;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.contract.repository.BusInctrctinfRepository;
 import me.zhengjie.modules.contract.service.BusInctrctinfService;
-import me.zhengjie.modules.contract.service.dto.BusInctrctinfDto;
-import me.zhengjie.modules.contract.service.dto.BusInctrctinfQueryCriteria;
 import me.zhengjie.modules.contract.service.mapstruct.BusInctrctinfMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +39,12 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
+
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -51,7 +61,13 @@ public class BusInctrctinfServiceImpl implements BusInctrctinfService {
 
     private final BusInctrctinfRepository busInctrctinfRepository;
     private final BusInctrctinfMapper busInctrctinfMapper;
-
+    private final BusInctrctinfCtrctbssgmtRepository busInctrctinfCtrctbssgmtRepository;
+    private final BusInctrctinfCtrctbssgmtMapper busInctrctinfCtrctbssgmtMapper;
+    private final BusInctrctinfCreditlimsgmtRepository busInctrctinfCreditlimsgmtRepository;
+    private final BusInctrctinfCreditlimsgmtMapper busInctrctinfCreditlimsgmtMapper;
+    private final BusInctrctinfCtrctcertrelsgmtRepository busInctrctinfCtrctcertrelsgmtRepository;
+    private final BusInctrctinfCtrctcertrelsgmtMapper busInctrctinfCtrctcertrelsgmtMapper;
+    private final BusInctrctinfCtrctcertrelsgmtService busInctrctinfCtrctcertrelsgmtService;
     @Override
     public Map<String,Object> queryAll(BusInctrctinfQueryCriteria criteria, Pageable pageable){
         Page<BusInctrctinf> page = busInctrctinfRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
@@ -60,7 +76,23 @@ public class BusInctrctinfServiceImpl implements BusInctrctinfService {
 
     @Override
     public List<BusInctrctinfDto> queryAll(BusInctrctinfQueryCriteria criteria){
-        return busInctrctinfMapper.toDto(busInctrctinfRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<BusInctrctinfDto>  list=busInctrctinfMapper.toDto(busInctrctinfRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        for(BusInctrctinfDto bean:list){
+           //基本信息
+            BusInctrctinfCtrctbssgmtQueryCriteria busInctrctinfCtrctbssgmtQueryCriteria=new BusInctrctinfCtrctbssgmtQueryCriteria();
+            busInctrctinfCtrctbssgmtQueryCriteria.setBusId(bean.getId());
+            bean.setBusInctrctinfCtrctbssgmtDto(busInctrctinfCtrctbssgmtMapper.toDto(busInctrctinfCtrctbssgmtRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,busInctrctinfCtrctbssgmtQueryCriteria,criteriaBuilder))).get(0));
+            //限额
+            BusInctrctinfCreditlimsgmtQueryCriteria busInctrctinfCreditlimsgmtQueryCriteria=new BusInctrctinfCreditlimsgmtQueryCriteria();
+            busInctrctinfCreditlimsgmtQueryCriteria.setBusId(bean.getId());
+            bean.setBusInctrctinfCreditlimsgmtDto(busInctrctinfCreditlimsgmtMapper.toDto(busInctrctinfCreditlimsgmtRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder))).get(0));
+            //相关责任人
+            BusInctrctinfCtrctcertrelsgmtQueryCriteria cBusInctrctinfCtrctcertrelsgmtQueryCriteria=new BusInctrctinfCtrctcertrelsgmtQueryCriteria();
+            cBusInctrctinfCtrctcertrelsgmtQueryCriteria.setBusId(bean.getId());
+            List<BusInctrctinfCtrctcertrelsgmtDto> lis=busInctrctinfCtrctcertrelsgmtService.queryAll(cBusInctrctinfCtrctcertrelsgmtQueryCriteria);
+            bean.setBusInctrctinfCtrctcertrelsgmtDto(lis.get(0));
+        }
+        return list;
     }
 
     @Override
@@ -109,5 +141,36 @@ public class BusInctrctinfServiceImpl implements BusInctrctinfService {
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusInctrctinfDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (all == null) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadBusInctrctinfFile(all, TaskConstants.Task_Bus_Inctrctinf+ DateHelper.getCurrentTimeNoSLong(),
+                    TaskConstants.Bus_Inctrctinf));
+            String zipPath = file.getPath() + ".zip";
+            ZipUtil.zip(file.getPath(), zipPath);
+            FileUtil.downloadFile(request, response, new File(zipPath), true);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
+    }
+
+    @Override
+    public void downloadCreditFile(List<BusInctrctinfDto> all) throws Exception {
+        if (all == null) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadBusInctrctinfFile(all, TaskConstants.Task_Bus_Inctrctinf+ DateHelper.getCurrentTimeNoSLong(),
+                    TaskConstants.Bus_Inctrctinf));
+            String zipPath = file.getPath() + ".zip";
+            ZipUtil.zip(file.getPath(), zipPath);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
     }
 }

@@ -18,6 +18,8 @@ package me.zhengjie.modules.contract.service.dto;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.io.Serializable;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -51,4 +53,6 @@ public class BusInctrctinfCtrctcertrelsgmtDto implements Serializable {
     private Integer uploadflag;
 
     private Timestamp createTime;
+
+    private List<BusInctrctinfCtrctcertrelDto> busInctrctinfCtrctcertrelDto;
 }

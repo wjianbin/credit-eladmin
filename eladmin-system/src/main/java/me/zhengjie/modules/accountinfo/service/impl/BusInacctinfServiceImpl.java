@@ -15,9 +15,12 @@
 */
 package me.zhengjie.modules.accountinfo.service.impl;
 
+import cn.hutool.core.util.ZipUtil;
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.accountinfo.domain.BusInacctinf;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.modules.custominfo.util.CreditInfoUtil;
+import me.zhengjie.modules.quartz.constant.TaskConstants;
+import me.zhengjie.utils.*;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.accountinfo.repository.BusInacctinfRepository;
 import me.zhengjie.modules.accountinfo.service.BusInacctinfService;
@@ -30,8 +33,8 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
+
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -113,11 +116,32 @@ public class BusInacctinfServiceImpl implements BusInacctinfService {
 
     @Override
     public void downloadCreditFile(List<BusInacctinfDto> all, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        if (all == null) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadBusInacctinfFile(all, TaskConstants.Task_Bus_Inacctinf+ DateHelper.getCurrentTimeNoSLong(),
+                    TaskConstants.Bus_Inacctinf));
+            String zipPath = file.getPath() + ".zip";
+            ZipUtil.zip(file.getPath(), zipPath);
+            FileUtil.downloadFile(request, response, new File(zipPath), true);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
     }
 
     @Override
     public void downloadCreditFile(List<BusInacctinfDto> all) throws Exception {
-
+        if (all == null) {
+            throw new BadRequestException("请选择数据");
+        }
+        try {
+            File file = new File(CreditInfoUtil.downloadBusInacctinfFile(all, TaskConstants.Task_Bus_Inacctinf+ DateHelper.getCurrentTimeNoSLong(),
+                    TaskConstants.Bus_Inacctinf));
+            String zipPath = file.getPath() + ".zip";
+            ZipUtil.zip(file.getPath(), zipPath);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
     }
 }

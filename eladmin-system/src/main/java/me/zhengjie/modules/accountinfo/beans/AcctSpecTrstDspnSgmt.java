@@ -1,6 +1,7 @@
 package me.zhengjie.modules.accountinfo.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,5 +24,5 @@ public class AcctSpecTrstDspnSgmt implements Serializable{
 	 */
 	private static final long serialVersionUID = -6429094871095615923L;
 	private String CagOfTrdNm;
-    private CagOfTrdInf CagOfTrdInf;
+    private List<CagOfTrdInf> CagOfTrdInf;
 }

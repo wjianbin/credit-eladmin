@@ -24,5 +24,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @author jianb-wang
 * @date 2020-07-01
 **/
-public interface BusDelInacctdelRepository extends JpaRepository<BusDelInacctdel, String>, JpaSpecificationExecutor<BusDelInacctdel> {
+public interface BusDelInacctdelRepository extends JpaRepository<BusDelInacctdel, Long>, JpaSpecificationExecutor<BusDelInacctdel> {
 }

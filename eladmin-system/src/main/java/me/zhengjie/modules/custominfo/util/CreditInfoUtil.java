@@ -2,19 +2,19 @@ package me.zhengjie.modules.custominfo.util;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.modules.accountinfo.beans.InAcctDel;
-import me.zhengjie.modules.accountinfo.beans.InAcctEntDel;
-import me.zhengjie.modules.accountinfo.beans.InAcctIDCagsInf;
-import me.zhengjie.modules.accountinfo.beans.InAcctMdfc;
-import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctdelDto;
-import me.zhengjie.modules.accountinfo.service.dto.BusDelInacctentdelDto;
-import me.zhengjie.modules.accountinfo.service.dto.BusUpdateAcctinfbycodeDto;
-import me.zhengjie.modules.accountinfo.service.dto.BusUpdateInacctidcagsinfDto;
+import me.zhengjie.modules.accountinfo.beans.*;
+import me.zhengjie.modules.accountinfo.domain.BusInspcevtdscinf;
+import me.zhengjie.modules.accountinfo.service.dto.*;
+import me.zhengjie.modules.contract.beans.*;
+import me.zhengjie.modules.contract.beans.MdfcSgmt;
+import me.zhengjie.modules.contract.service.dto.*;
 import me.zhengjie.modules.custominfo.beans.*;
+import me.zhengjie.modules.custominfo.beans.BsSgmt;
 import me.zhengjie.modules.custominfo.service.dto.*;
 import me.zhengjie.modules.quartz.constant.TaskConstants;
 import me.zhengjie.utils.DateHelper;
 import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.XMLUtil;
 
 import java.io.File;
@@ -521,6 +521,139 @@ public class CreditInfoUtil {
 	}
 
 	public static String downloadUpdateAcctinfbycodeFile(List<BusUpdateAcctinfbycodeDto> all, String pagName, String busType) throws Exception{
+        String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+        String fileName = createFileName(busType);
+        log.info("fileName:{}" + fileName);
+        String filePath = tempPath + File.separator + fileName + ".txt";
+        log.info("filePath:{}" + filePath);
+        StringBuffer sb = new StringBuffer();
+        // 文件头
+        String fileTitle=createFileTitle(busType, all.size());
+        log.info("fileTitle:{}" + fileTitle);
+        sb.append(fileTitle);
+        sb.append("\n");
+        for (BusUpdateAcctinfbycodeDto busUpdateAcctinfbycodeDto : all) {
+            InAcctMdfc inAcctMdfc = new InAcctMdfc();
+            String jsonBsSgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto);
+            me.zhengjie.modules.accountinfo.beans.BsSgmt bsSgmt = JSON.parseObject(jsonBsSgmt, me.zhengjie.modules.accountinfo.beans.BsSgmt.class);
+            inAcctMdfc.setBsSgmt(bsSgmt);
+            //B
+            //基础段
+            me.zhengjie.modules.accountinfo.beans.MdfcSgmt mdfcSgmt=new  me.zhengjie.modules.accountinfo.beans.MdfcSgmt();
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode() == null || "".equals(busUpdateAcctinfbycodeDto.getMdfcsgmtcode()))
+                continue;
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("B")){
+                String jsonAcctBsSgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfAcctbssgmtDto());
+                AcctBsSgmt acctBsSgmt = JSON.parseObject(jsonAcctBsSgmt, AcctBsSgmt.class);
+                mdfcSgmt.setAcctBsSgmt(acctBsSgmt);
+           }
+            //B
+            //基础段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("C")) {
+                String jsonAcctbsinfsgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfAcctbsinfsgmtDto());
+                AcctBsInfSgmt acctBsInfSgmt = JSON.parseObject(jsonAcctbsinfsgmt, AcctBsInfSgmt.class);
+                mdfcSgmt.setAcctBsInfSgmt(acctBsInfSgmt);
+            }
+            //D
+            //相关还款责任人段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("D")) {
+                String jsonRltRepymtInfSgm = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfRltrepymtinfsgmtDto());
+                RltRepymtInfSgm rltRepymtInfSgm = JSON.parseObject(jsonRltRepymtInfSgm, RltRepymtInfSgm.class);
+                if (busUpdateAcctinfbycodeDto.getBusInacctinfRltrepymtinfsgmtDto() != null) {
+                    List<RltRepymtInf> rltRepymtInfs = new ArrayList<>();
+                    for (BusInacctinfRltrepymtinfDto busInacctinfRltrepymtinfDto : busUpdateAcctinfbycodeDto.getBusInacctinfRltrepymtinfsgmtDto().getBusInacctinfRltrepymtinfDto()) {
+                        String jsonInacctinfRltrepymtinf = JSON.toJSONString(busInacctinfRltrepymtinfDto);
+                        RltRepymtInf rltRepymtInf = JSON.parseObject(jsonInacctinfRltrepymtinf, RltRepymtInf.class);
+                        rltRepymtInfs.add(rltRepymtInf);
+                    }
+                    rltRepymtInfSgm.setRltRepymtInf(rltRepymtInfs);
+                }
+                mdfcSgmt.setRltRepymtInfSgm(rltRepymtInfSgm);
+            }
+            //E
+            //抵质押物信息段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("E")) {
+                String jsonMotgacltalctrctinfsgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfGuarmotgacltalctrctinfsgmtDto());
+                MotgaCltalCtrctInfSgmt motgaCltalCtrctInfSgmt = JSON.parseObject(jsonMotgacltalctrctinfsgmt, MotgaCltalCtrctInfSgmt.class);
+                if (null != busUpdateAcctinfbycodeDto.getBusInacctinfGuarmotgacltalctrctinfsgmtDto()) {
+                    List<CccInf> ccInfs = new ArrayList<>();
+                    for (BusInacctinfCccinfDto busInacctinfCccinfDto : busUpdateAcctinfbycodeDto.getBusInacctinfGuarmotgacltalctrctinfsgmtDto().getBusInacctinfCccinfDto()) {
+                        String jsonInacctinfCccinf = JSON.toJSONString(busInacctinfCccinfDto);
+                        CccInf cccInf = JSON.parseObject(jsonInacctinfCccinf, CccInf.class);
+                        ccInfs.add(cccInf);
+                    }
+                    motgaCltalCtrctInfSgmt.setCccInf(ccInfs);
+                }
+                mdfcSgmt.setMotgaCltalCtrctInfSgmt(motgaCltalCtrctInfSgmt);
+            }
+            //F
+            //授信额度信息段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("F")) {
+                AcctCredSgmt acctCredSgmt = new AcctCredSgmt();
+                if (null != busUpdateAcctinfbycodeDto.getBusInacctinfAcctcredsgmtDto()) {
+                    acctCredSgmt.setMcc(busUpdateAcctinfbycodeDto.getBusInacctinfAcctcredsgmtDto().getMcc());
+                    mdfcSgmt.setAcctCredSgmt(acctCredSgmt);
+                }
+            }
+            //G
+            //初始债权说明段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("G")) {
+                String jsoOrigCreditorInfSgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfOrigcreditorinfsgmtDto());
+                OrigCreditorInfSgmt origCreditorInfSgmt = JSON.parseObject(jsoOrigCreditorInfSgmt, OrigCreditorInfSgmt.class);
+                mdfcSgmt.setOrigCreditorInfSgmt(origCreditorInfSgmt);
+            }
+            //H
+            //月度表现信息段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("H")) {
+                String jsoAcctMthlyBlgInfSgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfAcctmthlyblginfsgmtDto());
+                AcctMthlyBlgInfSgmt acctMthlyBlgInfSgmt = JSON.parseObject(jsoAcctMthlyBlgInfSgmt, AcctMthlyBlgInfSgmt.class);
+                mdfcSgmt.setAcctMthlyBlgInfSgmt(acctMthlyBlgInfSgmt);
+            }
+            //J
+            //非月度表现信息段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("J")) {
+                String jsoAcctDbtInfSgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfAcctdbtinfsgmtDto());
+                AcctDbtInfSgmt acctDbtInfSgmt = JSON.parseObject(jsoAcctDbtInfSgmt, AcctDbtInfSgmt.class);
+                mdfcSgmt.setAcctDbtInfSgmt(acctDbtInfSgmt);
+            }
+            //K
+            //特殊交易说明段
+            if (busUpdateAcctinfbycodeDto.getMdfcsgmtcode().equals("K")) {
+                String jsoAcctSpecTrstDspnSgmt = JSON.toJSONString(busUpdateAcctinfbycodeDto.getBusInacctinfAcctspectrstdspnsgmtDto());
+                AcctSpecTrstDspnSgmt acctSpecTrstDspnSgmt = JSON.parseObject(jsoAcctSpecTrstDspnSgmt, AcctSpecTrstDspnSgmt.class);
+                if (null != busUpdateAcctinfbycodeDto.getBusInacctinfAcctspectrstdspnsgmtDto()) {
+                    List<CagOfTrdInf> cagOfTrdInfS = new ArrayList<>();
+                    for (BusInacctinfCagoftrdinfDto busInacctinfCagoftrdinfDto : busUpdateAcctinfbycodeDto.getBusInacctinfAcctspectrstdspnsgmtDto().getBusInacctinfCagoftrdinfDto()) {
+                        String jsonInacctinfCagoftrdinf = JSON.toJSONString(busInacctinfCagoftrdinfDto);
+                        CagOfTrdInf cagOfTrdInf = JSON.parseObject(jsonInacctinfCagoftrdinf, CagOfTrdInf.class);
+                        cagOfTrdInfS.add(cagOfTrdInf);
+                    }
+                    acctSpecTrstDspnSgmt.setCagOfTrdInf(cagOfTrdInfS);
+                }
+                mdfcSgmt.setAcctSpecTrstDspnSgmt(acctSpecTrstDspnSgmt);
+            }
+            inAcctMdfc.setMdfcSgmt(mdfcSgmt);
+            sb.append(XMLUtil.convertToXml(inAcctMdfc));
+            sb.append("\n");
+        }
+        sb.substring(0, sb.length() - 1);
+        File file = new File(filePath);
+        // 生成目标文件
+        Writer writer = null;
+        try {
+            FileUtil.touch(file);
+            writer = new FileWriter(file);
+            writer.write(sb.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            assert writer != null;
+            writer.close();
+        }
+        return tempPath;
+	}
+
+	public static String downloadUpdateInacctidcagsinfxFile(List<BusUpdateInacctidcagsinfDto> all, String pagName, String busType)throws Exception {
 		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
 		String fileName = createFileName(busType);
 		log.info("fileName:{}" + fileName);
@@ -532,10 +665,10 @@ public class CreditInfoUtil {
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
 		sb.append("\n");
-		for (BusUpdateAcctinfbycodeDto busUpdateAcctinfbycodeDto : all) {
-			String json=JSON.toJSONString(busUpdateAcctinfbycodeDto);
-			InAcctEntDel inAcctEntDel=JSON.parseObject(json, InAcctEntDel.class);
-			sb.append(XMLUtil.convertToXml(inAcctEntDel));
+		for (BusUpdateInacctidcagsinfDto busUpdateInacctidcagsinfDto : all) {
+			String json=JSON.toJSONString(busUpdateInacctidcagsinfDto);
+			InAcctIDCagsInf inAcctIDCagsInf=JSON.parseObject(json, InAcctIDCagsInf.class);
+			sb.append(XMLUtil.convertToXml(inAcctIDCagsInf));
 			sb.append("\n");
 		}
 		sb.substring(0, sb.length() - 1);
@@ -555,7 +688,8 @@ public class CreditInfoUtil {
 		return tempPath;
 	}
 
-	public static String downloadUpdateInacctidcagsinfxFile(List<BusUpdateInacctidcagsinfDto> all, String pagName, String busType)throws Exception {
+    public static String downloadUpdateInctrctidcagsinfFile(List<BusUpdateInctrctidcagsinfDto> all, String pagName, String busType) throws Exception{
+
 		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
 		String fileName = createFileName(busType);
 		log.info("fileName:{}" + fileName);
@@ -567,10 +701,45 @@ public class CreditInfoUtil {
 		log.info("fileTitle:{}" + fileTitle);
 		sb.append(fileTitle);
 		sb.append("\n");
-		for (BusUpdateInacctidcagsinfDto busUpdateInacctidcagsinfDto : all) {
-			String json=JSON.toJSONString(busUpdateInacctidcagsinfDto);
-			InAcctMdfc inAcctMdfc=JSON.parseObject(json, InAcctMdfc.class);
-			sb.append(XMLUtil.convertToXml(inAcctMdfc));
+		for (BusUpdateInctrctidcagsinfDto busUpdateInctrctidcagsinfDto : all) {
+			String json=JSON.toJSONString(busUpdateInctrctidcagsinfDto);
+			InCtrctIDCagsInf inCtrctIDCagsInf=JSON.parseObject(json, InCtrctIDCagsInf.class);
+			sb.append(XMLUtil.convertToXml(inCtrctIDCagsInf));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+    }
+
+	public static String downloadDelInctrctdelFile(List<BusDelInctrctdelDto> all, String pagName, String busType) throws Exception{
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusDelInctrctdelDto busDelInctrctdelDto : all) {
+			String json=JSON.toJSONString(busDelInctrctdelDto);
+			InCtrctDel inCtrctDel=JSON.parseObject(json, InCtrctDel.class);
+			sb.append(XMLUtil.convertToXml(inCtrctDel));
 			sb.append("\n");
 		}
 		sb.substring(0, sb.length() - 1);
@@ -589,4 +758,292 @@ public class CreditInfoUtil {
 		}
 		return tempPath;
 	}
+
+	public static String downloadDelInctrctentdelFile(List<BusDelInctrctentdelDto> all, String pagName, String busType) throws Exception{
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusDelInctrctentdelDto busDelInctrctentdelDto : all) {
+			String json=JSON.toJSONString(busDelInctrctentdelDto);
+			InCtrctEntDel inCtrctEntDel=JSON.parseObject(json, InCtrctEntDel.class);
+			sb.append(XMLUtil.convertToXml(inCtrctEntDel));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadUUpdateInctrctinfbycodeFile(List<BusUpdateInctrctinfbycodeDto> all, String pagName, String busType) throws Exception{
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusUpdateInctrctinfbycodeDto busUpdateInctrctinfbycodeDto : all) {
+			String json=JSON.toJSONString(busUpdateInctrctinfbycodeDto);
+			InCtrctMdfc inCtrctMdfc=new InCtrctMdfc();
+			InCtrctMdfcBsSgmt inCtrctMdfcBsSgmt=JSON.parseObject(json, InCtrctMdfcBsSgmt.class);
+			inCtrctMdfc.setBsSgmt(inCtrctMdfcBsSgmt);
+			MdfcSgmt mdfcSgmt=new MdfcSgmt();
+			if(null == busUpdateInctrctinfbycodeDto.getMdfcsgmtcode() || "".equals(busUpdateInctrctinfbycodeDto.getMdfcsgmtcode())){
+				continue;
+			}
+			if(busUpdateInctrctinfbycodeDto.getMdfcsgmtcode().equals("B")){
+				BusInctrctinfCtrctbssgmtDto busInctrctinfCtrctbssgmtDto = busUpdateInctrctinfbycodeDto.getBusInctrctinfCtrctbssgmtDto();
+				String jsonCtrctBsSgmt=JSON.toJSONString(busInctrctinfCtrctbssgmtDto);
+				CtrctBsSgmt ctrctBsSgmt=JSON.parseObject(json, CtrctBsSgmt.class);
+				mdfcSgmt.setCtrctBsSgmt(ctrctBsSgmt);
+			}else if(busUpdateInctrctinfbycodeDto.getMdfcsgmtcode().equals("D")){
+				BusInctrctinfCreditlimsgmtDto busInctrctinfCreditlimsgmtDto=busUpdateInctrctinfbycodeDto.getBusInctrctinfCreditlimsgmtDto();
+				String jsonCtrctBsSgmt=JSON.toJSONString(busInctrctinfCreditlimsgmtDto);
+				CreditLimSgmt creditLimSgmt=JSON.parseObject(jsonCtrctBsSgmt, CreditLimSgmt.class);
+				mdfcSgmt.setCreditLimSgmt(creditLimSgmt);
+			} else if(busUpdateInctrctinfbycodeDto.getMdfcsgmtcode().equals("C")){
+				BusInctrctinfCtrctcertrelsgmtDto busInctrctinfCtrctcertrelsgmtDto=busUpdateInctrctinfbycodeDto.getBusInctrctinfCtrctcertrelsgmtDto();
+				CtrctCertRelSgmt ctrctCertRelSgmt=new CtrctCertRelSgmt();
+				ctrctCertRelSgmt.setBrerNm(busInctrctinfCtrctcertrelsgmtDto.getBrernm());
+				List<CtrctCertRel> ctrctCertRels=new ArrayList<>();
+				for(BusInctrctinfCtrctcertrelDto b:busInctrctinfCtrctcertrelsgmtDto.getBusInctrctinfCtrctcertrelDto()){
+					String jsonb=JSON.toJSONString(b);
+					CtrctCertRel ctrctCertRel=JSON.parseObject(jsonb, CtrctCertRel.class);
+					ctrctCertRels.add(ctrctCertRel);
+				}
+				ctrctCertRelSgmt.setCtrctCertRel(ctrctCertRels);
+				mdfcSgmt.setCtrctCertRelSgmt(ctrctCertRelSgmt);
+	        }
+			sb.append(XMLUtil.convertToXml(mdfcSgmt));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadBusInctrctinfFile(List<BusInctrctinfDto> all, String pagName, String busType) throws Exception{
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusInctrctinfDto busInctrctinfDto : all) {
+			InCtrctInf inCtrctInf=new InCtrctInf();
+
+			String jsonctrctBsSgmt=JSON.toJSONString(busInctrctinfDto.getBusInctrctinfCtrctbssgmtDto());
+			CtrctBsSgmt ctrctBsSgmt=JSON.parseObject(jsonctrctBsSgmt, CtrctBsSgmt.class);
+			inCtrctInf.setCtrctBsSgmt(ctrctBsSgmt);
+
+			String jsonCreditLimSgmt=JSON.toJSONString(busInctrctinfDto.getBusInctrctinfCreditlimsgmtDto());
+			CreditLimSgmt creditLimSgmt=JSON.parseObject(jsonCreditLimSgmt, CreditLimSgmt.class);
+			inCtrctInf.setCreditLimSgmt(creditLimSgmt);
+
+			if(null!=busInctrctinfDto.getBusInctrctinfCtrctcertrelsgmtDto()){
+				CtrctCertRelSgmt ctrctCertRelSgmt=new CtrctCertRelSgmt();
+				ctrctCertRelSgmt.setBrerNm(busInctrctinfDto.getBusInctrctinfCtrctcertrelsgmtDto().getBrernm());
+				List<CtrctCertRel> ctrctCertRelList=new ArrayList<>();
+				for(BusInctrctinfCtrctcertrelDto bean:busInctrctinfDto.getBusInctrctinfCtrctcertrelsgmtDto().getBusInctrctinfCtrctcertrelDto()){
+					String jsonbean=JSON.toJSONString(bean);
+					CtrctCertRel ctrctCertRel=JSON.parseObject(jsonbean, CtrctCertRel.class);
+					ctrctCertRelList.add(ctrctCertRel);
+				}
+				ctrctCertRelSgmt.setCtrctCertRel(ctrctCertRelList);
+				inCtrctInf.setCtrctCertRelSgmt(ctrctCertRelSgmt);
+			}
+			sb.append(XMLUtil.convertToXml(inCtrctInf));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+	public static String downloadBusInacctinfFile(List<BusInacctinfDto> all, String pagName, String busType) throws Exception{
+
+		String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+		String fileName = createFileName(busType);
+		log.info("fileName:{}" + fileName);
+		String filePath = tempPath + File.separator + fileName + ".txt";
+		log.info("filePath:{}" + filePath);
+		StringBuffer sb = new StringBuffer();
+		// 文件头
+		String fileTitle=createFileTitle(busType, all.size());
+		log.info("fileTitle:{}" + fileTitle);
+		sb.append(fileTitle);
+		sb.append("\n");
+		for (BusInacctinfDto busInacctinfDto : all) {
+			InAcctInf inAcctInf=new InAcctInf();
+			String jsonAcctBsSgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfAcctbssgmtDto());
+			AcctBsSgmt acctBsSgmt=JSON.parseObject(jsonAcctBsSgmt, AcctBsSgmt.class);
+			inAcctInf.setAcctBsSgmt(acctBsSgmt);
+            //
+			String jsonAcctbsinfsgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfAcctbsinfsgmtDto());
+			AcctBsInfSgmt acctBsInfSgmt=JSON.parseObject(jsonAcctbsinfsgmt, AcctBsInfSgmt.class);
+			inAcctInf.setAcctBsInfSgmt(acctBsInfSgmt);
+			//
+			String jsonRltRepymtInfSgm=JSON.toJSONString(busInacctinfDto.getBusInacctinfRltrepymtinfsgmtDto());
+			RltRepymtInfSgm rltRepymtInfSgm=JSON.parseObject(jsonRltRepymtInfSgm, RltRepymtInfSgm.class);
+			if(busInacctinfDto.getBusInacctinfRltrepymtinfsgmtDto()!=null) {
+                List<RltRepymtInf> rltRepymtInfs=new ArrayList<>();
+                for (BusInacctinfRltrepymtinfDto busInacctinfRltrepymtinfDto : busInacctinfDto.getBusInacctinfRltrepymtinfsgmtDto().getBusInacctinfRltrepymtinfDto()) {
+                    String jsonInacctinfRltrepymtinf = JSON.toJSONString(busInacctinfRltrepymtinfDto);
+                    RltRepymtInf rltRepymtInf = JSON.parseObject(jsonInacctinfRltrepymtinf, RltRepymtInf.class);
+                    rltRepymtInfs.add(rltRepymtInf);
+                }
+                rltRepymtInfSgm.setRltRepymtInf(rltRepymtInfs);
+            }
+            inAcctInf.setRltRepymtInfSgm(rltRepymtInfSgm);
+			//
+            String jsonMotgacltalctrctinfsgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfGuarmotgacltalctrctinfsgmtDto());
+            MotgaCltalCtrctInfSgmt motgaCltalCtrctInfSgmt=JSON.parseObject(jsonMotgacltalctrctinfsgmt, MotgaCltalCtrctInfSgmt.class);
+            if(null!=busInacctinfDto.getBusInacctinfGuarmotgacltalctrctinfsgmtDto()){
+                List<CccInf> ccInfs=new ArrayList<>();
+                for(BusInacctinfCccinfDto busInacctinfCccinfDto:busInacctinfDto.getBusInacctinfGuarmotgacltalctrctinfsgmtDto().getBusInacctinfCccinfDto()) {
+                    String jsonInacctinfCccinf = JSON.toJSONString(busInacctinfCccinfDto);
+                    CccInf cccInf = JSON.parseObject(jsonInacctinfCccinf, CccInf.class);
+                    ccInfs.add(cccInf);
+                }
+                motgaCltalCtrctInfSgmt.setCccInf(ccInfs);
+            }
+            inAcctInf.setMotgaCltalCtrctInfSgmt(motgaCltalCtrctInfSgmt);
+            //
+            AcctCredSgmt  acctCredSgmt=new AcctCredSgmt();
+            if(null!=busInacctinfDto.getBusInacctinfAcctcredsgmtDto()){
+                acctCredSgmt.setMcc(busInacctinfDto.getBusInacctinfAcctcredsgmtDto().getMcc());
+                inAcctInf.setAcctCredSgmt(acctCredSgmt);
+            }
+            //
+            String jsoOrigCreditorInfSgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfOrigcreditorinfsgmtDto());
+            OrigCreditorInfSgmt origCreditorInfSgmt=JSON.parseObject(jsoOrigCreditorInfSgmt, OrigCreditorInfSgmt.class);
+            inAcctInf.setOrigCreditorInfSgmt(origCreditorInfSgmt);
+            //
+            String jsoAcctMthlyBlgInfSgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfAcctmthlyblginfsgmtDto());
+            AcctMthlyBlgInfSgmt acctMthlyBlgInfSgmt=JSON.parseObject(jsoAcctMthlyBlgInfSgmt, AcctMthlyBlgInfSgmt.class);
+            inAcctInf.setAcctMthlyBlgInfSgmt(acctMthlyBlgInfSgmt);
+            //
+            String jsoAcctDbtInfSgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfAcctdbtinfsgmtDto());
+            AcctDbtInfSgmt acctDbtInfSgmt=JSON.parseObject(jsoAcctDbtInfSgmt, AcctDbtInfSgmt.class);
+            inAcctInf.setAcctDbtInfSgmt(acctDbtInfSgmt);
+            //
+            String jsoAcctSpecTrstDspnSgmt=JSON.toJSONString(busInacctinfDto.getBusInacctinfAcctspectrstdspnsgmtDto());
+            AcctSpecTrstDspnSgmt acctSpecTrstDspnSgmt=JSON.parseObject(jsoAcctSpecTrstDspnSgmt, AcctSpecTrstDspnSgmt.class);
+           if(null!=busInacctinfDto.getBusInacctinfAcctspectrstdspnsgmtDto()){
+               List<CagOfTrdInf> cagOfTrdInfS=new ArrayList<>();
+               for(BusInacctinfCagoftrdinfDto busInacctinfCagoftrdinfDto:busInacctinfDto.getBusInacctinfAcctspectrstdspnsgmtDto().getBusInacctinfCagoftrdinfDto()){
+                   String jsonInacctinfCagoftrdinf=JSON.toJSONString(busInacctinfCagoftrdinfDto);
+                   CagOfTrdInf cagOfTrdInf=JSON.parseObject(jsonInacctinfCagoftrdinf, CagOfTrdInf.class);
+                   cagOfTrdInfS.add(cagOfTrdInf);
+               }
+               acctSpecTrstDspnSgmt.setCagOfTrdInf(cagOfTrdInfS);
+           }
+            inAcctInf.setAcctSpecTrstDspnSgmt(acctSpecTrstDspnSgmt);
+			sb.append(XMLUtil.convertToXml(inAcctInf));
+			sb.append("\n");
+		}
+		sb.substring(0, sb.length() - 1);
+		File file = new File(filePath);
+		// 生成目标文件
+		Writer writer = null;
+		try {
+			FileUtil.touch(file);
+			writer = new FileWriter(file);
+			writer.write(sb.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+		return tempPath;
+	}
+
+    public static String downloadInspcevtdscinfFile(List<BusInspcevtdscinfDto> all, String pagName, String busType) throws  Exception{
+        String tempPath = SYS_TEM_DIR + "eladmin-gen-temp" + File.separator + pagName + File.separator;
+        String fileName = createFileName(busType);
+        log.info("fileName:{}" + fileName);
+        String filePath = tempPath + File.separator + fileName + ".txt";
+        log.info("filePath:{}" + filePath);
+        StringBuffer sb = new StringBuffer();
+        // 文件头
+        String fileTitle=createFileTitle(busType, all.size());
+        log.info("fileTitle:{}" + fileTitle);
+        sb.append(fileTitle);
+        sb.append("\n");
+        for (BusInspcevtdscinfDto busInspcevtdscinfDto : all) {
+            String json=JSON.toJSONString(busInspcevtdscinfDto);
+            BusInspcevtdscinf busInspcevtdscinf=JSON.parseObject(json, BusInspcevtdscinf.class);
+            sb.append(XMLUtil.convertToXml(busInspcevtdscinf));
+            sb.append("\n");
+        }
+        sb.substring(0, sb.length() - 1);
+        File file = new File(filePath);
+        // 生成目标文件
+        Writer writer = null;
+        try {
+            FileUtil.touch(file);
+            writer = new FileWriter(file);
+            writer.write(sb.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            assert writer != null;
+            writer.close();
+        }
+        return tempPath;
+    }
 }

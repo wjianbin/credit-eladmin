@@ -26,4 +26,6 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusInacctinfRltrepymtinfQueryCriteria{
+    @Query
+    private Long ritId;
 }

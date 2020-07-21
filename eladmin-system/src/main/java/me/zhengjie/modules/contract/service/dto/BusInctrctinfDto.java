@@ -40,11 +40,17 @@ public class BusInctrctinfDto implements Serializable {
 
     private Integer status;
 
-    private Integer inaccinfid;
+    private String inaccinfid;
 
     private Timestamp uploadtime;
 
     private Timestamp createtime;
 
     private Timestamp updatetime;
+
+    private BusInctrctinfCtrctbssgmtDto busInctrctinfCtrctbssgmtDto;
+
+    private BusInctrctinfCreditlimsgmtDto busInctrctinfCreditlimsgmtDto;
+
+    private BusInctrctinfCtrctcertrelsgmtDto busInctrctinfCtrctcertrelsgmtDto;
 }

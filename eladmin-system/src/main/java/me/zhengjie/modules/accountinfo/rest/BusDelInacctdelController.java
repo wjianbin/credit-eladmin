@@ -82,7 +82,7 @@ public class BusDelInacctdelController {
     @ApiOperation("删除/api/del_inacctdel")
     @PreAuthorize("@el.check('busDelInacctdel:del')")
     @DeleteMapping
-    public ResponseEntity<Object> delete(@RequestBody String[] ids) {
+    public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
         busDelInacctdelService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

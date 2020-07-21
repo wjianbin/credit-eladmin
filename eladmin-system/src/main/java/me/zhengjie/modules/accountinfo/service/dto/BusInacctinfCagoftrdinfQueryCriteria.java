@@ -26,4 +26,8 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class BusInacctinfCagoftrdinfQueryCriteria{
+
+    /** 特殊交_id */
+    @Query
+    private Long accId;
 }
